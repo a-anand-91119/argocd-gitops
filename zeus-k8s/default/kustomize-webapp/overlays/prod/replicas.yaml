@@ -5,6 +5,3 @@ metadata:
   name: mywebapp
 spec:
   replicas: 4
-  selector:
-    matchLabels:
-      app: kustomize-app
