@@ -1,7 +1,10 @@
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: ReplicaSet
 metadata:
   name: mywebapp
 spec:
   replicas: 3
+  selector:
+    matchLabels:
+      app: kustomize-app
