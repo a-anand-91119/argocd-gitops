@@ -6,4 +6,4 @@ metadata:
 data:
   BG_COLOR: '#12181b'
   FONT_COLOR: '#FFFFFF'
-  CUSTOM_HEADER: "{{ .Values.configmap.data.CUSTOM_HEADER }}"
+  CUSTOM_HEADER: {{ .Values.configmap.data.CUSTOM_HEADER }}
