@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cloudflared-tunnel
-  namespace: cloudflare-tunnel-argocd
+  namespace: cloudflare-tunnel
 spec:
   replicas: 3
   selector:
