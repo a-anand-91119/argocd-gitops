@@ -1,11 +1,12 @@
-replicaCount: 1
-image:
-  repository: localstack/localstack-pro
-extraEnvVars:
-  - name: LOCALSTACK_AUTH_TOKEN
-    valueFrom:
-      secretKeyRef:
-        name: localstack-auth-token
-        key: auth-token
-podAnnotations:
-  linkerd.io/inject: enabled
+localstack:
+  replicaCount: 1
+  image:
+    repository: localstack/localstack-pro
+  extraEnvVars:
+    - name: LOCALSTACK_AUTH_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: localstack-auth-token
+          key: auth-token
+  podAnnotations:
+    linkerd.io/inject: enabled
