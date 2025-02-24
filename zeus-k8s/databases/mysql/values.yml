@@ -1,0 +1,10 @@
+global:
+  defaultStorageClass: "longhorn"
+  storageClass: "longhorn"
+architecture: "replication"
+auth:
+  existingSecret: mysql-auth-secrets
+  createDatabase: true
+  database: admin
+secondary:
+  replicaCount: 2

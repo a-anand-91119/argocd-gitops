@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: mysql
+description: Sub-chart for MySQL
+type: application
+version: 1.0.0
+appVersion: 12.2.4
+dependencies:
+  - name: mysql
+    version: 12.2.4
+    repository: https://charts.bitnami.com/bitnami
