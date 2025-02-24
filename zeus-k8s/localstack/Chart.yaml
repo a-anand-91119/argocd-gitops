@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: localstack
+description: Sub-chart for localstack
+type: application
+version: 1.0.0
+appVersion: 0.6.21
+dependencies:
+  - name: localstack
+    version: 0.6.21
+    repository: https://helm.localstack.cloud

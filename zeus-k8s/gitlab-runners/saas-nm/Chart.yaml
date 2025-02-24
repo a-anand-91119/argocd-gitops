@@ -4,8 +4,8 @@ name: gitlab-runner-saas-nm
 description: Sub-chart for Saas GitLab NM account
 type: application
 version: 1.0.0
-appVersion: ">=0.74.0"
+appVersion: "0.74.0"
 dependencies:
   - name: gitlab
-    version: ">=0.74.0"
+    version: "0.74.0"
     repository: https://charts.gitlab.io/
