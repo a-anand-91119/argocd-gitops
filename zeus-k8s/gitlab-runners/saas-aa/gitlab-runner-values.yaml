@@ -1,0 +1,17 @@
+---
+gitlabUrl: "https://gitlab.com/"
+concurrent: 20
+runners:
+  config: |
+    [[runners]]
+      executor = "kubernetes"
+      [runners.kubernetes]
+        namespace = "gitlab-runner-saas-aa"
+        poll_timeout = 3600
+        privileged = true
+  name: "saas-aa-runner"
+  secret: "gitlab-runner-token"
+rbac:
+  create: true
+podAnnotations:
+  linkerd.io/inject: enabled

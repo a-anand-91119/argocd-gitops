@@ -1,0 +1,39 @@
+---
+replicas: 3
+revisionHistoryLimit: 3
+gitlabUrl: "https://gitlab.notyouraverage.dev/"
+concurrent: 20
+runners:
+  config: |
+    [[runners]]
+      executor = "kubernetes"
+      [runners.kubernetes]
+        namespace = "gitlab-runner-nyad"
+        privileged = true
+        poll_timeout = 3600
+      [[runners.kubernetes.volumes.empty_dir]]
+        name = "docker-certs"
+        mount_path = "/certs/client"
+        medium = "Memory"
+  name: "gitlab-runner-nyad"
+  secret: "gitlab-runner-token"
+rbac:
+  create: true
+podAnnotations:
+  linkerd.io/inject: enabled
+extraEnv:
+  CACHE_SHARED: true
+  CACHE_TYPE: s3
+  CACHE_MAX_UPLOADED_ARCHIVE_SIZE: 2147483648
+  CACHE_S3_BUCKET_LOCATION: us-east-1
+  CACHE_S3_BUCKET_NAME: gitlab-runner-caches
+  CACHE_S3_SERVER_ADDRESS: garage.notyouraverage.dev
+extraEnvFrom:
+  CACHE_S3_ACCESS_KEY:
+    secretKeyRef:
+      name: gitlab-runner-s3-cache-aws-creds
+      key: accesskey
+  CACHE_S3_SECRET_KEY:
+    secretKeyRef:
+      name: gitlab-runner-s3-cache-aws-creds
+      key: secretkey
