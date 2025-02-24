@@ -1,9 +1,10 @@
-replicas: 3
-args:
-  - '--kubelet-insecure-tls'
-podDisruptionBudget:
-  enabled: true
-  minAvailable: 1
-updateStrategy:
-  rollingUpdate:
-    maxUnavailable: 1
+metrics-server:
+  replicas: 3
+  args:
+    - '--kubelet-insecure-tls'
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
