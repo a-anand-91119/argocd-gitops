@@ -1,0 +1,9 @@
+replicas: 2
+args:
+  - '--kubelet-insecure-tls'
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+updateStrategy:
+  rollingUpdate:
+    maxUnavailable: 1
