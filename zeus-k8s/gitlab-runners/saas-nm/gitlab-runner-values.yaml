@@ -1,21 +1,22 @@
 ---
-gitlabUrl: "https://gitlab.com/"
-concurrent: 20
-runners:
-  config: |
-    [[runners]]
-      executor = "kubernetes"
-      [runners.kubernetes]
-        namespace = "gitlab-runner-saas-nm"
-        privileged = true
-        poll_timeout = 3600
-      [[runners.kubernetes.volumes.empty_dir]]
-        name = "docker-certs"
-        mount_path = "/certs/client"
-        medium = "Memory"
-  name: "saas-nm-runner"
-  secret: "gitlab-runner-token"
-rbac:
-  create: true
-podAnnotations:
-  linkerd.io/inject: enabled
+gitlab-runner:
+  gitlabUrl: "https://gitlab.com/"
+  concurrent: 20
+  runners:
+    config: |
+      [[runners]]
+        executor = "kubernetes"
+        [runners.kubernetes]
+          namespace = "gitlab-runner-saas-nm"
+          privileged = true
+          poll_timeout = 3600
+        [[runners.kubernetes.volumes.empty_dir]]
+          name = "docker-certs"
+          mount_path = "/certs/client"
+          medium = "Memory"
+    name: "saas-nm-runner"
+    secret: "gitlab-runner-token"
+  rbac:
+    create: true
+  podAnnotations:
+    linkerd.io/inject: enabled

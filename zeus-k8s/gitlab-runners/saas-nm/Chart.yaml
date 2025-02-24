@@ -6,6 +6,6 @@ type: application
 version: 1.0.0
 appVersion: "0.74.0"
 dependencies:
-  - name: gitlab
+  - name: gitlab-runner
     version: "0.74.0"
     repository: https://charts.gitlab.io/
