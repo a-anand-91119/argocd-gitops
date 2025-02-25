@@ -8,6 +8,6 @@ mysql:
     createDatabase: true
     database: admin
   secondary:
-    replicaCount: 2
+    replicaCount: 1
   volumePermissions:
     enabled: true
