@@ -1,5 +1,5 @@
 sealed-secrets:
-  nameOverride: sealed-secrets-controller
+  fullnameOverride: sealed-secrets-controller
   resources:
     limits:
       memory: 256Mi
