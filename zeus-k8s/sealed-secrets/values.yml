@@ -1,7 +1,7 @@
 sealed-secrets:
+  nameOverride: sealed-secrets-controller
   resources:
     limits:
       memory: 256Mi
     requests:
       cpu: 150m
-  releaseName: sealed-secrets-controller
