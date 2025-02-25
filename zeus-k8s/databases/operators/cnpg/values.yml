@@ -1,7 +1,2 @@
-sealed-secrets:
-  fullnameOverride: sealed-secrets-controller
-  resources:
-    limits:
-      memory: 256Mi
-    requests:
-      cpu: 150m
+cloudnative-pg:
+  fullnameOverride: cloudnative-pg
