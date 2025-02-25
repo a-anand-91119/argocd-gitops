@@ -9,3 +9,5 @@ mysql:
     database: admin
   secondary:
     replicaCount: 2
+  volumePermissions:
+    enabled: true
