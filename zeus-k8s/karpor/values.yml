@@ -6,4 +6,3 @@ karpor:
     serviceType: LoadBalancer
   syncer:
     replicas: 2
-
