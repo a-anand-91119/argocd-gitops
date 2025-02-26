@@ -3,5 +3,7 @@ karpor:
   server:
     name: karpor-server
     replicas: 2
+    serviceType: LoadBalancer
   syncer:
     replicas: 2
+
