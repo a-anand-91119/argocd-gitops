@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: karpor
+description: Sub-chart for karpor
+type: application
+version: 1.0.0
+appVersion: 0.7.5
+dependencies:
+  - name: karpor
+    version: 0.7.5
+    repository: https://kusionstack.github.io/charts/
