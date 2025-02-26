@@ -1,4 +1,5 @@
 karpor:
+  namespace: karpor
   server:
     name: karpor-server
     replicas: 2
