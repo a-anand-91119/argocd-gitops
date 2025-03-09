@@ -138,8 +138,8 @@ tenant:
     #
     # Both fields default to ``false``.
     exposeServices:
-      minio: true
-      console: true
+      minio: false
+      console: false
     ###
     # Directs the Operator to add the Tenant's metric scrape configuration to an existing Kubernetes Prometheus deployment managed by the Prometheus Operator.
     prometheusOperator: false
