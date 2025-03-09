@@ -1,0 +1,23 @@
+---
+# Source: spring-boot-app/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: plg-service-scheduler
+  labels:
+    helm.sh/chart: spring-boot-app-0.0.1
+    app.kubernetes.io/name: plg-service-scheduler
+    app.kubernetes.io/instance: release
+    app.kubernetes.io/version: "0.0.1"
+    app.kubernetes.io/managed-by: Helm
+  namespace: plg-services
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: plg-service-scheduler
+    app.kubernetes.io/instance: release

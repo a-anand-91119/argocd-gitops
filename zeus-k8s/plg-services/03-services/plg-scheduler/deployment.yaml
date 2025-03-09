@@ -1,0 +1,85 @@
+---
+# Source: spring-boot-app/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plg-service-scheduler
+  labels:
+    helm.sh/chart: spring-boot-app-0.0.1
+    app.kubernetes.io/name: plg-service-scheduler
+    app.kubernetes.io/instance: release
+    app.kubernetes.io/version: "0.0.1"
+    app.kubernetes.io/managed-by: Helm
+  namespace: plg-services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: plg-service-scheduler
+      app.kubernetes.io/instance: release
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        helm.sh/chart: spring-boot-app-0.0.1
+        app.kubernetes.io/name: plg-service-scheduler
+        app.kubernetes.io/instance: release
+        app.kubernetes.io/version: "0.0.1"
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      imagePullSecrets:
+        - name: plg-services-registry-secret
+      serviceAccountName: plg-service-scheduler
+      securityContext:
+        {}
+      containers:
+        - name: plg-service-scheduler
+          securityContext:
+            {}
+          image: "registry.gitlab.notyouraverage.dev/marketing-plg/service-scheduler:76c4be4f"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+          resources:
+            {}
+          env:
+            - name: CLUSTER_ID
+              value: "1"
+            - name: SPRING_PROFILES_ACTIVE
+              value: production
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_URL
+                  name: plg-scheduler-secrets
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_USERNAME
+                  name: plg-scheduler-secrets
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_PASSWORD
+                  name: plg-scheduler-secrets
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  key: AWS_ACCESS_KEY_ID
+                  name: plg-scheduler-secrets
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: AWS_SECRET_ACCESS_KEY
+                  name: plg-scheduler-secrets

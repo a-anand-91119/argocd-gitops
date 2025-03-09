@@ -1,0 +1,22 @@
+---
+# Source: spring-boot-app/templates/tests/pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "plg-service-scheduler-test-connection"
+  labels:
+    helm.sh/chart: spring-boot-app-0.0.1
+    app.kubernetes.io/name: plg-service-scheduler
+    app.kubernetes.io/instance: release
+    app.kubernetes.io/version: "0.0.1"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test
+  namespace: plg-services
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['plg-service-scheduler:8080']
+  restartPolicy: Never
