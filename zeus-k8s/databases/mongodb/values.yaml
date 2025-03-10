@@ -1,5 +1,5 @@
 mongodb:
-  namespace: minio-operator
+  namespace: mongodb
   architecture: replicaset
   externalAccess:
     enabled: true
