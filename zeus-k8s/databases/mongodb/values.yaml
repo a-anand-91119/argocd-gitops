@@ -2,7 +2,7 @@ mongodb:
   namespace: minio-operator
   architecture: replicaset
   auth:
-    existingSecret: "mongodb-secret"
+    existingSecret: "mongodb-secrets"
     usernames:
       - admin
     databases:
