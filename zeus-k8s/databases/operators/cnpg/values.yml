@@ -1,2 +1,5 @@
 cloudnative-pg:
   fullnameOverride: cloudnative-pg
+  config:
+    clusterWide: false
+namespace: cnpg-system
