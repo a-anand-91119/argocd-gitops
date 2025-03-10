@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: mongodb
+description: Sub-chart for MongoDB
+type: application
+version: 1.0.0
+appVersion: 16.4.6
+dependencies:
+  - name: mongodb
+    version: 16.4.6
+    repository: https://charts.bitnami.com/bitnami

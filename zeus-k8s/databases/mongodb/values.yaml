@@ -1,0 +1,14 @@
+mongodb:
+  namespace: minio-operator
+  architecture: replicaset
+  auth:
+    existingSecret: "mongodb-secret"
+    usernames:
+      - admin
+    databases:
+      - admin
+  persistence:
+    enabled: true
+    size: 8Gi
+    storageClass: "longhorn"
+  replicaCount: 3
