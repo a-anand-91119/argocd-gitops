@@ -1,6 +1,17 @@
 mongodb:
   namespace: minio-operator
   architecture: replicaset
+  externalAccess:
+    enabled: true
+    service:
+      type: LoadBalancer
+    autoDiscovery:
+      enabled: true
+  serviceAccount:
+    create: true
+  automountServiceAccountToken: true
+  rbac:
+    create: true
   auth:
     existingSecret: "mongodb-secrets"
     usernames:
