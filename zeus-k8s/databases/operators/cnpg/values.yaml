@@ -1,4 +1,4 @@
 cloudnative-pg:
   config:
-    clusterWide: false
+    clusterWide: true
   namespace: cnpg-system
