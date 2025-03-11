@@ -1,0 +1,13 @@
+#---
+#apiVersion: postgresql.cnpg.io/v1
+#kind: ScheduledBackup
+#metadata:
+#  name: cnpg-postgres-15-backup
+#  namespace: postgres
+#spec:
+#  cluster:
+#    name: cnpg-postgres-15
+#  method: volumeSnapshot
+#  schedule: '0 0 0 * * *'
+#  backupOwnerReference: cluster
+#  immediate: true

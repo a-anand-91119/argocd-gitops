@@ -1,0 +1,37 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: cnpg-postgres-17
+  namespace: postgres
+spec:
+  instances: 3
+  enableSuperuserAccess: true
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ImageCatalog
+    name: postgresql-17
+    major: 17
+  storage:
+    storageClass: csi-nfs-retained
+    size: 10Gi
+  walStorage:
+    storageClass: csi-nfs-retained
+    size: 5Gi
+#  backup:
+#    volumeSnapshot:
+#      className: longhorn-vsc
+#    barmanObjectStore:
+#      destinationPath: s3://cnpg-postgres-backups/cnpg-postgres-17/
+#      endpointURL: "https://localstack-k8s.notyouraverage.dev"
+#      s3Credentials:
+#        accessKeyId:
+#          name: aws-creds
+#          key: ACCESS_KEY_ID
+#        secretAccessKey:
+#          name: aws-creds
+#          key: ACCESS_SECRET_KEY
+#      wal:
+#        compression: gzip
+#        maxParallel: 2
+  primaryUpdateMethod: switchover
