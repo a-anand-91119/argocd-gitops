@@ -13,10 +13,10 @@ spec:
     name: postgresql-15
     major: 15
   storage:
-    storageClass: csi-nfs-retained
+    storageClass: longhorn
     size: 10Gi
   walStorage:
-    storageClass: csi-nfs-retained
+    storageClass: longhorn
     size: 5Gi
 #  backup:
 #    volumeSnapshot:
