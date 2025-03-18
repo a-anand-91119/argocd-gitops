@@ -1,0 +1,9 @@
+valkey:
+  auth:
+    existingSecret: valkey-credentials
+  primary:
+    persistence:
+      storageClass: longhorn
+  replica:
+    persistence:
+      storageClass: longhorn

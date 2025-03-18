@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: valkey
+description: Sub-chart for ValKey
+type: application
+version: 1.0.0
+appVersion: 2.4.6
+dependencies:
+  - name: valkey
+    version: 2.4.6
+    repository: https://charts.bitnami.com/bitnami
