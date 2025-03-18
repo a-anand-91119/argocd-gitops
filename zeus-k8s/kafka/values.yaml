@@ -1,0 +1,8 @@
+kafka:
+  defaultStorageClass: longhorn
+  replicaCount: 3
+  metrics:
+    jmx:
+      enabled: true
+  volumePermissions:
+    enabled: true
