@@ -6,3 +6,8 @@ kafka:
       enabled: true
   volumePermissions:
     enabled: true
+  sasl:
+    client:
+      users:
+        - kafka-user
+    existingSecret: kafka-credentials
