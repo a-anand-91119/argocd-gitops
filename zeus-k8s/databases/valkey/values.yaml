@@ -1,6 +1,12 @@
 valkey:
+  sentinels:
+    enabled: true
+    persistence:
+      enabled: true
+      storageClass: longhorn
   auth:
     existingSecret: valkey-credentials
+    existingSecretPasswordKey: password
   primary:
     persistence:
       storageClass: longhorn
