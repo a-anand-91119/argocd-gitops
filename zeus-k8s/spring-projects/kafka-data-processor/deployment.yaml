@@ -37,7 +37,7 @@ spec:
         - name: kafka-data-processor
           securityContext:
             {}
-          image: "registry.gitlab.notyouraverage.dev/spring-projects/spring-boot-kafka-processor:664b0852"
+          image: "registry.gitlab.notyouraverage.dev/spring-projects/spring-boot-kafka-processor:3593fd77"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -54,6 +54,8 @@ spec:
           resources:
             {}
           env:
+            - name: GRPC_NAME_SERVICE_ENDPOINT
+              value: grpc-stats-aggregator-service.spring-projects.svc.cluster.local:8080
             - name: KAFKA_BOOTSTRAP_SERVERS
               value: apache-kafka.kafka.svc.cluster.local:9092
             - name: ENABLE_VIRTUAL_THREADS
