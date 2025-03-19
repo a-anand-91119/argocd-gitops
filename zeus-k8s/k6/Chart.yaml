@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: k6-operator
+description: Sub-chart for K6 Operator
+type: application
+version: 1.0.0
+appVersion: 3.11.1
+dependencies:
+  - name: k6-operator
+    version: 3.11.1
+    repository: https://grafana.github.io/helm-charts

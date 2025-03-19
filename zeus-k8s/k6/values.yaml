@@ -1,0 +1,3 @@
+k6-operator:
+  manager:
+    replicas: 3
