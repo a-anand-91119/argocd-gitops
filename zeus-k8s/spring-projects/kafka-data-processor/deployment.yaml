@@ -56,8 +56,6 @@ spec:
           env:
             - name: GRPC_NAME_SERVICE_ENDPOINT
               value: grpc-stats-aggregator-service.spring-projects.svc.cluster.local:8080
-            - name: KAFKA_SASL_JAAS_CONFIG
-              value: org.apache.kafka.common.security.plain.PlainLoginModule required username=kafka-user password=cBDq5ftC2xyESqI2T1lhRCSjGcaeLZg1kmT5CA8hA8Ll4STUZ8d9lzM5ILxdcsCH;
             - name: KAFKA_BOOTSTRAP_SERVERS
               value: apache-kafka.kafka.svc.cluster.local:9092
             - name: ENABLE_VIRTUAL_THREADS
