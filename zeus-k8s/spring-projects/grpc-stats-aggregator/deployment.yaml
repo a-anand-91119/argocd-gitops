@@ -1,0 +1,80 @@
+---
+# Source: spring-boot-app/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpc-stats-aggregator
+  labels:
+    helm.sh/chart: spring-boot-app-0.0.1
+    app.kubernetes.io/name: grpc-stats-aggregator
+    app.kubernetes.io/instance: release
+    app.kubernetes.io/version: "0.0.1"
+    app.kubernetes.io/managed-by: Helm
+  namespace: spring-projects
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: grpc-stats-aggregator
+      app.kubernetes.io/instance: release
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        helm.sh/chart: spring-boot-app-0.0.1
+        app.kubernetes.io/name: grpc-stats-aggregator
+        app.kubernetes.io/instance: release
+        app.kubernetes.io/version: "0.0.1"
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      imagePullSecrets:
+        - name: spring-projects-registry-secret
+      serviceAccountName: grpc-stats-aggregator
+      securityContext:
+        {}
+      containers:
+        - name: grpc-stats-aggregator
+          securityContext:
+            {}
+          image: "registry.gitlab.notyouraverage.dev/spring-projects/grpc-stats-aggregator:13c5ed75"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+          resources:
+            {}
+          env:
+            - name: REDIS_HOST
+              value: valkey-primary.valkey.svc.cluster.local
+            - name: REDIS_PORT
+              value: 6379
+            - name: REDIS_DATABASE
+              value: 1
+            - name: ENABLE_TRACES
+              value: "false"
+            - name: SPRING_PROFILES_ACTIVE
+              value: production
+            - name: TRACES_SAMPLING_RATE
+              value: "0.0"
+            - name: OLTP_TRACING_ENDPOINT
+              value: http://locahost
+            - name: REDIS_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: REDIS_USERNAME
+                  name: grpc-stats-aggregator-secrets
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: REDIS_PASSWORD
+                  name: grpc-stats-aggregator-secrets
