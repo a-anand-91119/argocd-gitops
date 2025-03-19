@@ -57,9 +57,9 @@ spec:
             - name: REDIS_HOST
               value: valkey-primary.valkey.svc.cluster.local
             - name: REDIS_PORT
-              value: 6379
+              value: "6379"
             - name: REDIS_DATABASE
-              value: 1
+              value: "1"
             - name: ENABLE_TRACES
               value: "false"
             - name: SPRING_PROFILES_ACTIVE
