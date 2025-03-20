@@ -6,5 +6,3 @@ prometheus:
         app: prometheus
         component: server
         heritage: Helm
-kube-state-metrics:
-  prometheusScrape: true
