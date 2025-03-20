@@ -1,11 +1,11 @@
 ---
 apiVersion: v2
-name: kube-prometheus-stack
-description: Sub-chart for Kubernetes Prometheus Monitoring
+name: prometheus
+description: Sub-chart for Prometheus
 type: application
 version: 1.0.0
-appVersion: 70.1.1
+appVersion: 27.5.1
 dependencies:
-  - name: kube-prometheus-stack
-    version: 70.1.1
+  - name: prometheus
+    version: 27.5.1
     repository: https://prometheus-community.github.io/helm-charts
