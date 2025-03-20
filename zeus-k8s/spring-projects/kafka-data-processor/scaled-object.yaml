@@ -1,0 +1,20 @@
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: kafka-data-processor-scaled-object
+  namespace: spring-projects
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: kafka-data-processor
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  triggers:
+    - type: kafka
+      metadata:
+        bootstrapServers: apache-kafka.kafka.svc.cluster.local:9092
+        consumerGroup: listenerRequestMessages
+        topic: IncomingRequests
+        lagThreshold: '5'
