@@ -1,0 +1,4 @@
+grafana:
+  namespace: observability
+  autoscaling:
+    enabled: true

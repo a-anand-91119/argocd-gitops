@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: grafana
+description: Sub-chart for Grafana
+type: application
+version: 1.0.0
+appVersion: 27.5.1
+dependencies:
+  - name: grafana
+    version: 11.6.0
+    repository: https://charts.bitnami.com/bitnami
