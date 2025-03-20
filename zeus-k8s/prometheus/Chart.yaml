@@ -4,7 +4,7 @@ name: prometheus
 description: Sub-chart for Prometheus
 type: application
 version: 1.0.0
-appVersion: 0.7.5
+appVersion: 27.5.1
 dependencies:
   - name: prometheus
     version: 27.5.1
