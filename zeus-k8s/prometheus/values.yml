@@ -1,8 +1,2 @@
-prometheus:
+kube-prometheus-stack:
   namespace: observability
-  server:
-    service:
-      labels:
-        app: prometheus
-        component: server
-        heritage: Helm
