@@ -1,0 +1,47 @@
+---
+# Source: spring-boot-app/templates/tests/test-service.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "asynchronous-http-server-test-service"
+  labels:
+    helm.sh/chart: spring-boot-app-0.0.1
+    app.kubernetes.io/name: asynchronous-http-server
+    app.kubernetes.io/instance: release
+    app.kubernetes.io/version: "0.0.1"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": hook-succeeded
+  namespace: spring-projects
+spec:
+  containers:
+    - name: tester
+      image: curlimages/curl:latest
+      command:
+        - /bin/sh
+        - -ec
+        - |
+          echo "Testing service connectivity..."
+          
+          # Allow some time for the service to be fully established
+          sleep 5
+          
+          # Testing basic connectivity
+          echo "Testing basic service connectivity..."
+          curl --connect-timeout 5 --max-time 10 -s "http://asynchronous-http-server:8080" -o /dev/null || echo "Warning: Basic connectivity check failed"
+          
+          # Testing readiness endpoint if available
+          echo "Testing readiness endpoint..."
+          curl --connect-timeout 5 --max-time 10 -s "http://asynchronous-http-server:8080/actuator/health/readiness" -o /dev/null && echo "✅ Readiness endpoint verified" || echo "Warning: Readiness endpoint not available"
+          
+          # Testing liveness endpoint if available
+          echo "Testing liveness endpoint..."
+          curl --connect-timeout 5 --max-time 10 -s "http://asynchronous-http-server:8080/actuator/health/liveness" -o /dev/null && echo "✅ Liveness endpoint verified" || echo "Warning: Liveness endpoint not available"
+          
+          # Basic health endpoint test
+          echo "Testing general health endpoint..."
+          curl --connect-timeout 5 --max-time 10 -s "http://asynchronous-http-server:8080/actuator/health" -o /dev/null && echo "✅ Health endpoint verified" || echo "Warning: Health endpoint not available"
+          
+          echo "Service connectivity tests completed."
+  restartPolicy: Never

@@ -1,5 +1,5 @@
 ---
-# Source: spring-boot-app/templates/tests/pod.yaml
+# Source: spring-boot-app/templates/tests/test-pod.yaml
 apiVersion: v1
 kind: Pod
 metadata:
