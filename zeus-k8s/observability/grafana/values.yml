@@ -2,7 +2,3 @@ grafana:
   namespace: observability
   autoscaling:
     enabled: true
-  persistence:
-    type: pvc
-    enabled: true
-    storageClassName: longhorn
