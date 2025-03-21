@@ -6,3 +6,5 @@ prometheus:
         app: prometheus
         component: server
         heritage: Helm
+    global:
+      scrape_interval: 30s
