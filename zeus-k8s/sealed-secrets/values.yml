@@ -5,3 +5,9 @@ sealed-secrets:
       memory: 256Mi
     requests:
       cpu: 150m
+  metrics:
+    serviceMonitor:
+      enabled: false
+  pdb:
+    create: true
+    minAvailable: 1
