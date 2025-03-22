@@ -8,3 +8,7 @@ kube-prometheus-stack:
       serviceMonitorSelectorNilUsesHelmValues: false
       podMonitorSelectorNilUsesHelmValues: false
       probeSelectorNilUsesHelmValues: false
+  kubeEtcd:
+    service:
+      selector:
+        component: etcd
