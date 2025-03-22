@@ -7,7 +7,8 @@ sealed-secrets:
       cpu: 150m
   metrics:
     serviceMonitor:
-      enabled: false
+      enabled: true
+      namespace: observability
   pdb:
     create: true
     minAvailable: 1
