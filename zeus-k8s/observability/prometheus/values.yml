@@ -1,10 +1,4 @@
-prometheus:
-  namespace: observability
-  server:
-    service:
-      labels:
-        app: prometheus
-        component: server
-        heritage: Helm
-    global:
-      scrape_interval: 30s
+kube-prometheus-stack:
+  grafana:
+    adminUser: admin
+    adminPassword: admin
