@@ -2,12 +2,21 @@ kube-prometheus-stack:
   grafana:
     adminUser: admin
     adminPassword: admin
+    service:
+      type: LoadBalancer
   prometheus:
     prometheusSpec:
       ruleSelectorNilUsesHelmValues: false
       serviceMonitorSelectorNilUsesHelmValues: false
       podMonitorSelectorNilUsesHelmValues: false
       probeSelectorNilUsesHelmValues: false
+    service:
+      type: LoadBalancer
+      port: 9090
+      targetPort: 9090
+  alertmanager:
+    service:
+      type: LoadBalancer
   kubeEtcd:
     service:
       selector:
