@@ -1,6 +1,0 @@
-grafana:
-  namespace: observability
-  autoscaling:
-    enabled: true
-  service:
-    type: LoadBalancer
