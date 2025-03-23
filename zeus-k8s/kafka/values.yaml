@@ -4,6 +4,12 @@ kafka:
   metrics:
     jmx:
       enabled: true
+    serviceMonitor:
+      enabled: true
+      namespace: observability
+    prometheusRule:
+      enabled: true
+      namespace: observability
   volumePermissions:
     enabled: true
   sasl:
