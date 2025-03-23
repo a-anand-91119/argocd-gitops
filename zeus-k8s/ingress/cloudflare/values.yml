@@ -1,0 +1,19 @@
+cloudflare-tunnel-ingress-controller:
+  namespace: cloudflare-ingress
+  cloudflare:
+    secretRef:
+      name: cloudflare-tunnel-ingress-secret
+      accountIDKey: ACCOUNT_ID
+      tunnelNameKey: TUNNEL_NAME
+      apiTokenKey: API_TOKEN
+  replicaCount: 2
+  resources:
+    limits:
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  cloudflared:
+    replicaCount: 3
+  cloudflaredServiceMonitor:
+    create: true

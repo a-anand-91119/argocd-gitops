@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: cloudflare-tunnel-ingress
+description: Sub-chart for cloudflare-tunnel-ingress
+type: application
+version: 1.0.0
+appVersion: 0.0.18
+dependencies:
+  - name: cloudflare-tunnel-ingress-controller
+    version: 0.0.18
+    repository: https://helm.strrl.dev/
