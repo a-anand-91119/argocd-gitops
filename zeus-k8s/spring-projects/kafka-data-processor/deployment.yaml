@@ -36,7 +36,7 @@ spec:
         - name: kafka-data-processor
           securityContext:
             {}
-          image: "registry.gitlab.notyouraverage.dev/spring-projects/spring-boot-kafka-processor:faa69091"
+          image: "registry.gitlab.notyouraverage.dev/spring-projects/spring-boot-kafka-processor:c0c988f3"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
