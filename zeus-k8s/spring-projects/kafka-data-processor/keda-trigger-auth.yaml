@@ -12,6 +12,9 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 spec:
   secretTargetRef:
+    - parameter: sasl
+      name: kafka-data-processor-secrets
+      key: KAFKA_SASL_MECHANISM
     - parameter: password
       name: kafka-data-processor-secrets
       key: KAFKA_AUTH_PASSWORD
