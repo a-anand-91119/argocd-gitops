@@ -6,20 +6,24 @@ kube-prometheus-stack:
       enabled: true
       ingressClassName: cloudflare-tunnel
       hosts:
-        - grafana-k8s-test.notyouraverage.dev
+        - grafana-k8s.notyouraverage.dev
   prometheus:
     prometheusSpec:
       ruleSelectorNilUsesHelmValues: false
       serviceMonitorSelectorNilUsesHelmValues: false
       podMonitorSelectorNilUsesHelmValues: false
       probeSelectorNilUsesHelmValues: false
-    service:
-      type: LoadBalancer
-      port: 9090
-      targetPort: 9090
+    ingress:
+      enabled: true
+      ingressClassName: cloudflare-tunnel
+      hosts:
+        - prometheus-k8s.notyouraverage.dev
   alertmanager:
-    service:
-      type: LoadBalancer
+    ingress:
+      enabled: true
+      ingressClassName: cloudflare-tunnel
+      hosts:
+        - alertmanager-k8s.notyouraverage.dev
   kubeEtcd:
     service:
       selector:
