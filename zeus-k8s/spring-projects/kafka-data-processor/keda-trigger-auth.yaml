@@ -1,0 +1,20 @@
+---
+# Source: spring-boot-app/templates/keda-trigger-auth.yaml
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: kafka-data-processor-kafka-auth
+  labels:
+    helm.sh/chart: spring-boot-app-0.0.1
+    app.kubernetes.io/name: kafka-data-processor
+    app.kubernetes.io/instance: release
+    app.kubernetes.io/version: "0.0.1"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  secretTargetRef:
+    - parameter: password
+      name: kafka-data-processor-secrets
+      key: KAFKA_AUTH_PASSWORD
+    - parameter: username
+      name: kafka-data-processor-secrets
+      key: KAFKA_AUTH_USERNAME

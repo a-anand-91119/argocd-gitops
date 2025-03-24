@@ -13,3 +13,5 @@ resources:
   - serviceaccount.yaml
   - deployment.yaml
   - service.yaml
+  - autoscaling.yaml
+  - keda-trigger-auth.yaml

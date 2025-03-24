@@ -1,0 +1,28 @@
+---
+# Source: spring-boot-app/templates/autoscaling.yaml
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: kafka-data-processor
+  labels:
+    helm.sh/chart: spring-boot-app-0.0.1
+    app.kubernetes.io/name: kafka-data-processor
+    app.kubernetes.io/instance: release
+    app.kubernetes.io/version: "0.0.1"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  scaleTargetRef:
+    name: kafka-data-processor
+  minReplicaCount: 1
+  maxReplicaCount: 5
+  pollingInterval: 30
+  cooldownPeriod: 300
+  triggers:
+  - type: kafka
+    metadata:
+      bootstrapServers: "apache-kafka.kafka.svc.cluster.local:9092"
+      consumerGroup: "IncomingRequestListener"
+      lagThreshold: "50"
+      topic: "IncomingRequests"
+    authenticationRef:
+      name: kafka-data-processor-kafka-auth
