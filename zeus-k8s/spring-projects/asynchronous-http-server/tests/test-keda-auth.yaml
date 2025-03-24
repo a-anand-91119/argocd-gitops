@@ -1,0 +1,26 @@
+---
+# Source: spring-boot-app/templates/tests/test-keda-auth.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "asynchronous-http-server-test-keda-auth"
+  labels:
+    helm.sh/chart: spring-boot-app-0.0.1
+    app.kubernetes.io/name: asynchronous-http-server
+    app.kubernetes.io/instance: release
+    app.kubernetes.io/version: "0.0.1"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": hook-succeeded
+  namespace: spring-projects
+spec:
+  containers:
+    - name: kubectl
+      image: bitnami/kubectl:latest
+      command:
+        - /bin/sh
+        - -ec
+        - |
+          echo "Skipping KEDA Trigger Authentication tests - KEDA is not enabled"
+  restartPolicy: Never
