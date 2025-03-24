@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: kafka-exporter
+description: Sub-chart for Prometheus Kafka Exporter
+type: application
+version: 1.0.0
+appVersion: 70.2.0
+dependencies:
+  - name: prometheus-kafka-exporter
+    version: 2.12.1
+    repository: https://prometheus-community.github.io/helm-charts

@@ -1,0 +1,14 @@
+prometheus-kafka-exporter:
+  replicaCount: 2
+  kafkaServer:
+    - apache-kafka.kafka.svc.cluster.local:9092
+  prometheus:
+    serviceMonitor:
+      enabled: true
+      namespace: observability
+  sasl:
+    enabled: true
+    scram:
+      enabled: true
+      mechanism: plain
+      secretName: kafka-credentials
