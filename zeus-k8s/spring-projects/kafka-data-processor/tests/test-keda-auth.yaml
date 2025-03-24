@@ -33,6 +33,7 @@ spec:
           echo "Verifying secret references..."
           kubectl get secret kafka-data-processor-secrets || echo "Warning: Secret kafka-data-processor-secrets not found"
           kubectl get secret kafka-data-processor-secrets || echo "Warning: Secret kafka-data-processor-secrets not found"
+          kubectl get secret kafka-data-processor-secrets || echo "Warning: Secret kafka-data-processor-secrets not found"
           echo "✅ Secret references verified"
           
           # Verify pod identity if present
