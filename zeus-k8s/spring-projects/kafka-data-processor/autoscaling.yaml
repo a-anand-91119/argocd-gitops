@@ -14,7 +14,7 @@ spec:
   scaleTargetRef:
     name: kafka-data-processor
   minReplicaCount: 1
-  maxReplicaCount: 50
+  maxReplicaCount: 64
   pollingInterval: 30
   cooldownPeriod: 300
   triggers:
@@ -22,7 +22,7 @@ spec:
     metadata:
       bootstrapServers: "apache-kafka.kafka.svc.cluster.local:9092"
       consumerGroup: "IncomingRequestListener"
-      lagThreshold: "50"
+      lagThreshold: "200"
       topic: "IncomingRequests"
     authenticationRef:
       name: kafka-data-processor-kafka-auth
