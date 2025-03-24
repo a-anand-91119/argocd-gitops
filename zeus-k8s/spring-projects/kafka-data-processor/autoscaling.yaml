@@ -14,7 +14,7 @@ spec:
   scaleTargetRef:
     name: kafka-data-processor
   minReplicaCount: 1
-  maxReplicaCount: 5
+  maxReplicaCount: 50
   pollingInterval: 30
   cooldownPeriod: 300
   triggers:
