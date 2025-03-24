@@ -19,11 +19,8 @@ kube-prometheus-stack:
       hosts:
         - prometheus-k8s.notyouraverage.dev
   alertmanager:
-    ingress:
-      enabled: true
-      ingressClassName: cloudflare-tunnel
-      hosts:
-        - alertmanager-k8s.notyouraverage.dev
+    service:
+      type: LoadBalancer
   kubeEtcd:
     service:
       selector:
