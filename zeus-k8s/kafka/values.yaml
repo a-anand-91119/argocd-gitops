@@ -6,10 +6,10 @@ kafka:
       enabled: true
     serviceMonitor:
       enabled: true
-      namespace: observability
+      namespace: monitoring
     prometheusRule:
       enabled: true
-      namespace: observability
+      namespace: monitoring
   volumePermissions:
     enabled: true
   sasl:
