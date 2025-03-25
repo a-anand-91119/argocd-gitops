@@ -4,8 +4,8 @@ name: mysql
 description: Sub-chart for MySQL
 type: application
 version: 1.0.0
-appVersion: 12.2.4
+appVersion: 12.3.2
 dependencies:
   - name: mysql
-    version: 12.2.4
+    version: 12.3.2
     repository: https://charts.bitnami.com/bitnami
