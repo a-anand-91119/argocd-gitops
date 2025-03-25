@@ -4,8 +4,8 @@ name: mongodb
 description: Sub-chart for MongoDB
 type: application
 version: 1.0.0
-appVersion: 16.4.6
+appVersion: 16.4.10
 dependencies:
   - name: mongodb
-    version: 16.4.6
+    version: 16.4.10
     repository: https://charts.bitnami.com/bitnami
