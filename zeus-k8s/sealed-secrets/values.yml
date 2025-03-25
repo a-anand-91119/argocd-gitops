@@ -8,7 +8,7 @@ sealed-secrets:
   metrics:
     serviceMonitor:
       enabled: true
-      namespace: observability
+      namespace: monitoring
   pdb:
     create: true
     minAvailable: 1
