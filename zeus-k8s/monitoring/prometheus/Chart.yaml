@@ -4,8 +4,8 @@ name: prometheus
 description: Sub-chart for Prometheus
 type: application
 version: 1.0.0
-appVersion: 70.2.0
+appVersion: 70.3.0
 dependencies:
   - name: kube-prometheus-stack
-    version: 70.2.0
+    version: 70.3.0
     repository: https://prometheus-community.github.io/helm-charts
