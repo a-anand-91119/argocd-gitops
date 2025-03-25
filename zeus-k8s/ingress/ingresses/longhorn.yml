@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: longhorn-dashboard
+  namespace: longhorn-system
+spec:
+  ingressClassName: cloudflare-tunnel
+  rules:
+    - host: longhorn-k8s.notyouraverage.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: longhorn-frontend
+                port:
+                  number: 80
