@@ -4,8 +4,8 @@ name: minio-operator
 description: Sub-chart for minio-operator
 type: application
 version: 1.0.0
-appVersion: 4.3.7
+appVersion: 7.0.1
 dependencies:
   - name: minio-operator
-    version: 4.3.7
+    version: 7.0.1
     repository: https://operator.min.io
