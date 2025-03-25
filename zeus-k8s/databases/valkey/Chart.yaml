@@ -4,8 +4,8 @@ name: valkey
 description: Sub-chart for ValKey
 type: application
 version: 1.0.0
-appVersion: 2.4.6
+appVersion: 2.4.7
 dependencies:
   - name: valkey
-    version: 2.4.6
+    version: 2.4.7
     repository: https://charts.bitnami.com/bitnami
