@@ -4,8 +4,8 @@ name: gitlab-runner-nyad
 description: Sub-chart for Self-Hosted NYAD GitLab Instance
 type: application
 version: 1.0.0
-appVersion: "0.74.0"
+appVersion: "0.75.0"
 dependencies:
   - name: gitlab-runner
-    version: "0.74.0"
+    version: "0.75.0"
     repository: https://charts.gitlab.io/
