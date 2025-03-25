@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: linkerd-viz-web
+  namespace: linkerd-viz
+spec:
+  ingressClassName: cloudflare-tunnel
+  rules:
+    - host: linkerd-k8s.notyouraverage.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web
+                port:
+                  number: 8084
