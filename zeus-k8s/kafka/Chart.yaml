@@ -4,8 +4,8 @@ name: kafka
 description: Sub-chart for Apache Kafka
 type: application
 version: 1.0.0
-appVersion: 32.0.0
+appVersion: 31.5.0
 dependencies:
   - name: kafka
-    version: 32.0.0
+    version: 31.5.0
     repository: https://charts.bitnami.com/bitnami
