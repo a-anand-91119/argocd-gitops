@@ -1,4 +1,4 @@
-minio-operator:
+operator:
   namespace: minio-operator
   ###
   # Root key for Operator Helm Chart
