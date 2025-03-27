@@ -1,6 +1,25 @@
 kafka:
   defaultStorageClass: longhorn
-  replicaCount: 6
+  broker:
+    replicaCount: 6
+    resourcesPreset: "2xlarge"
+    pdb:
+      minAvailable: 3
+    autoscaling:
+      hpa:
+        enabled: true
+        minReplicas: 6
+        maxReplicas: 12
+  controller:
+    replicaCount: 3
+    controllerOnly: true
+    autoscaling:
+      hpa:
+        enabled: true
+        minReplicas: 3
+        maxReplicas: 6
+    pdb:
+      minAvailable: 1
   metrics:
     jmx:
       enabled: true
