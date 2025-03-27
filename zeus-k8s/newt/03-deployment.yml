@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: newt
+  namespace: newt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: newt
+  template:
+    metadata:
+      labels:
+        app: newt
+    spec:
+      containers:
+        - name: newt
+          image: fosrl/newt
+          env:
+            - name: PANGOLIN_ENDPOINT
+              value: "https://pangolin.notyouraverage.dev"
+            - name: NEWT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: newt-secrets
+                  key: NEWT_ID
+            - name: NEWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: newt-secrets
+                  key: NEWT_SECRET
+          restartPolicy: Always
