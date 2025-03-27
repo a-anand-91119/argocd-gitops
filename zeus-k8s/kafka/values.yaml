@@ -1,6 +1,6 @@
 kafka:
   defaultStorageClass: longhorn
-  replicaCount: 4
+  replicaCount: 6
   metrics:
     jmx:
       enabled: true
