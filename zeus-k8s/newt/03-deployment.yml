@@ -30,4 +30,3 @@ spec:
                 secretKeyRef:
                   name: newt-secrets
                   key: NEWT_SECRET
-          restartPolicy: Always
