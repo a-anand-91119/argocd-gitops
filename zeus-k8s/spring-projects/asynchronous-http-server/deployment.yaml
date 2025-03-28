@@ -21,6 +21,9 @@ spec:
     metadata:
       annotations:
         linkerd.io/inject: enabled
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "http"
+      prometheus.io/path: "/actuator/prometheus"
       labels:
         helm.sh/chart: spring-boot-app-0.0.1
         app.kubernetes.io/name: asynchronous-http-server
@@ -37,7 +40,7 @@ spec:
         - name: asynchronous-http-server
           securityContext:
             {}
-          image: "registry.gitlab.notyouraverage.dev/spring-projects/spring-boot-asynchronous-http:d3928f39"
+          image: "registry.gitlab.notyouraverage.dev/spring-projects/spring-boot-asynchronous-http:dc8933f2"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

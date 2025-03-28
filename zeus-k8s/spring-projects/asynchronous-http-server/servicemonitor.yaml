@@ -1,0 +1,26 @@
+---
+# Source: spring-boot-app/templates/servicemonitor.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: asynchronous-http-server
+  namespace: observability
+  labels:
+    helm.sh/chart: spring-boot-app-0.0.1
+    app.kubernetes.io/name: asynchronous-http-server
+    app.kubernetes.io/instance: release
+    app.kubernetes.io/version: "0.0.1"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  endpoints:
+    - port: http
+      path: /actuator/prometheus
+      interval: 30s
+      scheme: http
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: asynchronous-http-server
+      app.kubernetes.io/instance: release
+  namespaceSelector:
+    matchNames:
+      - spring-projects
