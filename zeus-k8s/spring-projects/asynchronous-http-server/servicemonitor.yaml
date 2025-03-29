@@ -4,7 +4,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: asynchronous-http-server
-  namespace: observability
+  namespace: monitoring
   labels:
     helm.sh/chart: spring-boot-app-0.0.1
     app.kubernetes.io/name: asynchronous-http-server
