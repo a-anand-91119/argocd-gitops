@@ -23,4 +23,4 @@ spec:
       app.kubernetes.io/instance: release
   namespaceSelector:
     matchNames:
-      - spring-projects
+      - monitoring
