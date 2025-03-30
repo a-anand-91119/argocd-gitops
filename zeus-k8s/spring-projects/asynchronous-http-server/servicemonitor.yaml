@@ -21,6 +21,6 @@ spec:
     matchLabels:
       app.kubernetes.io/name: asynchronous-http-server
       app.kubernetes.io/instance: release
-  namespaceSelector:
-    matchNames:
-      - spring-projects
+    namespaceSelector:
+      matchNames:
+        - spring-projects
