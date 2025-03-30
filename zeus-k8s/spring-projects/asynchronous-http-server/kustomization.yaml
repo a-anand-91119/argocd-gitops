@@ -13,6 +13,8 @@ resources:
   - service-account.yaml
   - deployment.yaml
   - service.yaml
+  - service-monitor.yaml
+
 patches:
   - path: service-monitor.yaml
     target:
