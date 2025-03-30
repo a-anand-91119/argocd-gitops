@@ -14,9 +14,11 @@ resources:
   - deployment.yaml
   - service.yaml
   - service-monitor.yaml
-
 patches:
-  - path: service-monitor.yaml
-    target:
+  - target:
       kind: ServiceMonitor
       name: asynchronous-http-server
+    patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: monitoring
