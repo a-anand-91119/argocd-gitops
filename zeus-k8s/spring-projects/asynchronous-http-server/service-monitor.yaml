@@ -1,5 +1,5 @@
 ---
-# Source: spring-boot-app/templates/servicemonitor.yaml
+# Source: spring-boot-app/templates/service-monitor.yaml
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -8,7 +8,7 @@ metadata:
   labels:
     helm.sh/chart: spring-boot-app-0.0.1
     app.kubernetes.io/name: asynchronous-http-server
-    app.kubernetes.io/instance: release
+    app.kubernetes.io/instance: spring-boot-asynchronous-http
     app.kubernetes.io/version: "0.0.1"
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -20,7 +20,7 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: asynchronous-http-server
-      app.kubernetes.io/instance: release
+      app.kubernetes.io/instance: spring-boot-asynchronous-http
   namespaceSelector:
     matchNames:
       - spring-projects

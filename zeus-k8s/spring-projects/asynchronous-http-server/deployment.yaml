@@ -7,7 +7,7 @@ metadata:
   labels:
     helm.sh/chart: spring-boot-app-0.0.1
     app.kubernetes.io/name: asynchronous-http-server
-    app.kubernetes.io/instance: release
+    app.kubernetes.io/instance: spring-boot-asynchronous-http
     app.kubernetes.io/version: "0.0.1"
     app.kubernetes.io/managed-by: Helm
   namespace: spring-projects
@@ -16,7 +16,7 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: asynchronous-http-server
-      app.kubernetes.io/instance: release
+      app.kubernetes.io/instance: spring-boot-asynchronous-http
   template:
     metadata:
       annotations:
@@ -27,7 +27,7 @@ spec:
       labels:
         helm.sh/chart: spring-boot-app-0.0.1
         app.kubernetes.io/name: asynchronous-http-server
-        app.kubernetes.io/instance: release
+        app.kubernetes.io/instance: spring-boot-asynchronous-http
         app.kubernetes.io/version: "0.0.1"
         app.kubernetes.io/managed-by: Helm
     spec:
@@ -40,7 +40,7 @@ spec:
         - name: asynchronous-http-server
           securityContext:
             {}
-          image: "registry.gitlab.notyouraverage.dev/spring-projects/spring-boot-asynchronous-http:d6c57241"
+          image: "registry.gitlab.notyouraverage.dev/spring-projects/spring-boot-asynchronous-http:e47286cc"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
