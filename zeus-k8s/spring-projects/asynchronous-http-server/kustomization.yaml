@@ -22,7 +22,3 @@ patches:
       name: asynchronous-http-server
       version: v1
       group: monitoring.coreos.com
-    patch: |-
-      - op: replace
-        path: /metadata/namespace
-        value: monitoring
