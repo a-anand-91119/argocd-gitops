@@ -14,8 +14,10 @@ resources:
   - deployment.yaml
   - service.yaml
   - service-monitor.yaml
+
 patches:
-  - target:
+  - path: service-monitor.yaml
+    target:
       kind: ServiceMonitor
       name: asynchronous-http-server
       version: v1
