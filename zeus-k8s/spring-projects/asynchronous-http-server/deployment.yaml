@@ -40,7 +40,7 @@ spec:
         - name: asynchronous-http-server
           securityContext:
             {}
-          image: "registry.gitlab.notyouraverage.dev/spring-projects/spring-boot-asynchronous-http:e47286cc"
+          image: "registry.gitlab.notyouraverage.dev/spring-projects/spring-boot-asynchronous-http:8253a92c"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
