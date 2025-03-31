@@ -21,6 +21,9 @@ spec:
     metadata:
       annotations:
         linkerd.io/inject: enabled
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "http"
+        prometheus.io/path: "/actuator/prometheus"
       labels:
         helm.sh/chart: spring-boot-app-0.0.1
         app.kubernetes.io/name: grpc-stats-aggregator
@@ -37,7 +40,7 @@ spec:
         - name: grpc-stats-aggregator
           securityContext:
             {}
-          image: "registry.gitlab.notyouraverage.dev/spring-projects/grpc-stats-aggregator:5dbc39d5"
+          image: "registry.gitlab.notyouraverage.dev/spring-projects/grpc-stats-aggregator:a8551198"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
