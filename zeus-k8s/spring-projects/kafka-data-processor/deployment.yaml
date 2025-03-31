@@ -20,6 +20,9 @@ spec:
     metadata:
       annotations:
         linkerd.io/inject: enabled
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "http"
+        prometheus.io/path: "/actuator/prometheus"
       labels:
         helm.sh/chart: spring-boot-app-0.0.1
         app.kubernetes.io/name: kafka-data-processor
@@ -36,7 +39,7 @@ spec:
         - name: kafka-data-processor
           securityContext:
             {}
-          image: "registry.gitlab.notyouraverage.dev/spring-projects/spring-boot-kafka-processor:c0c988f3"
+          image: "registry.gitlab.notyouraverage.dev/spring-projects/spring-boot-kafka-processor:75065b26"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
