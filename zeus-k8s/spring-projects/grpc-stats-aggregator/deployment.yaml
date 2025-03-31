@@ -40,7 +40,7 @@ spec:
         - name: grpc-stats-aggregator
           securityContext:
             {}
-          image: "registry.gitlab.notyouraverage.dev/spring-projects/grpc-stats-aggregator:a8551198"
+          image: "registry.gitlab.notyouraverage.dev/spring-projects/grpc-stats-aggregator:ac4b37b5"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
