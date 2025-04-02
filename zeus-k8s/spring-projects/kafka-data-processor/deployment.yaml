@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/instance: release
     app.kubernetes.io/version: "0.0.1"
     app.kubernetes.io/managed-by: Helm
-  namespace: spring-projects
+  namespace: "spring-projects"
 spec:
   selector:
     matchLabels:
@@ -39,7 +39,7 @@ spec:
         - name: kafka-data-processor
           securityContext:
             {}
-          image: "registry.gitlab.notyouraverage.dev/spring-projects/spring-boot-kafka-processor:75065b26"
+          image: "registry.gitlab.notyouraverage.dev/spring-projects/spring-boot-kafka-processor:f12ee785"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
