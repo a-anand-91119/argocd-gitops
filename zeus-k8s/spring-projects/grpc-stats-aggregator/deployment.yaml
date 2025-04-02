@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/instance: release
     app.kubernetes.io/version: "0.0.1"
     app.kubernetes.io/managed-by: Helm
-  namespace: spring-projects
+  namespace: "spring-projects"
 spec:
   replicas: 1
   selector:
@@ -40,7 +40,7 @@ spec:
         - name: grpc-stats-aggregator
           securityContext:
             {}
-          image: "registry.gitlab.notyouraverage.dev/spring-projects/grpc-stats-aggregator:ac4b37b5"
+          image: "registry.gitlab.notyouraverage.dev/spring-projects/grpc-stats-aggregator:426c5cd6"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
