@@ -1,0 +1,5 @@
+cyclops-ui:
+  ctrl:
+    replicas: 1
+  ui:
+    replicas: 1

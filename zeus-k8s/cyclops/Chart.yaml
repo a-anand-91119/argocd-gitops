@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: cyclops-ui
+description: Sub-chart for cyclops-ui
+type: application
+version: 1.0.0
+appVersion: v0.18.1
+dependencies:
+  - name: cyclops-ui
+    repository: https://cyclops-ui.com/helm
+    version: v0.18.1
