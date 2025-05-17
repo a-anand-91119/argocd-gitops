@@ -11,10 +11,10 @@ gitlab-runner:
         [runners.kubernetes]
           namespace = "gitlab-runner-nyad"
           privileged = true
-          memory_request = "1Gi"
+          memory_request = "500Mi"
           memory_limit_overwrite_max_allowed = "5Gi"
           memory_request_overwrite_max_allowed = "5Gi"
-          memory_limit = "1Gi"
+          memory_limit = "500Mi"
           poll_timeout = 3600
         [[runners.kubernetes.volumes.empty_dir]]
           name = "docker-certs"
