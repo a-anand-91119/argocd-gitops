@@ -1,0 +1,13 @@
+sonarqube:
+  namespace: sonarqube
+  replicaCount: 3
+  community:
+    enabled: true
+  ingress:
+    enabled: true
+    ingressClassName: cloudflare-tunnel
+    hosts:
+      - sonarqube-k8s.notyouraverage.dev
+  prometheusMonitoring:
+    podMonitor:
+      enabled: true

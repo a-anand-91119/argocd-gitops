@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: sonarqube
+description: Sub-chart for SonarQube Community Edition
+type: application
+version: 1.0.0
+appVersion: 2025.3.0
+dependencies:
+  - name: sonarqube
+    version: 2025.3.0
+    repository: https://SonarSource.github.io/helm-chart-sonarqube
