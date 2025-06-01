@@ -8,4 +8,7 @@ sonarqube:
     ingressClassName: cloudflare-tunnel
     hosts:
       - sonarqube-k8s.notyouraverage.dev
+  prometheusMonitoring:
+    podMonitor:
+      enabled: true
   monitoringPasscode: sonarqube_monitoring_passcode
