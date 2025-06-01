@@ -8,3 +8,4 @@ sonarqube:
     ingressClassName: cloudflare-tunnel
     hosts:
       - sonarqube-k8s.notyouraverage.dev
+  monitoringPasscode: sonarqube_monitoring_passcode
