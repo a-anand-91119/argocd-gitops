@@ -1,0 +1,55 @@
+vault:
+  global:
+    namespace: vault
+    serverTelemetry:
+      prometheusOperator: true
+  injector:
+    enabled: true
+    replicas: 3
+    leaderElector:
+      enabled: true
+    metrics:
+      enabled: true
+    logLevel: info
+  server:
+    enabled: true
+    logLevel: info
+    service:
+      enabled: true
+    dataStorage:
+      enabled: true
+      size: 5Gi
+      storageClass: longhorn
+      accessMode: ReadWriteOnce
+    auditStorage:
+      enabled: true
+      size: 5Gi
+      storageClass: null
+      accessMode: ReadWriteOnce
+    ingress:
+      enabled: true
+      ingressClassName: cloudflare-tunnel
+      hosts:
+        - name: vault-k8s.notyouraverage.dev
+  ui:
+    enabled: true
+    serviceType: LoadBalancer
+  serverTelemetry:
+    serviceMonitor:
+      enabled: true
+    prometheusRules:
+      rules:
+        - alert: vault-HighResponseTime
+          annotations:
+            message: The response time of Vault is over 500ms on average over the last 5 minutes.
+          expr: vault_core_handle_request{quantile="0.5", namespace="vault"} > 500
+          for: 5m
+          labels:
+            severity: warning
+        - alert: vault-HighResponseTime
+          annotations:
+            message: The response time of Vault is over 1s on average over the last 5 minutes.
+          expr: vault_core_handle_request{quantile="0.5", namespace="vault"} > 1000
+          for: 5m
+          labels:
+            severity: critical

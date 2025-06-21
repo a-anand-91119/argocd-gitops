@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: hashicorp-vault
+description: Sub-chart for SonarQube Community Edition
+type: application
+version: 1.0.0
+appVersion: 2025.3.0
+dependencies:
+  - name: vault
+    version: 0.30.0
+    repository: https://helm.releases.hashicorp.com
