@@ -9,6 +9,3 @@ sealed-secrets:
     serviceMonitor:
       enabled: true
       namespace: monitoring
-  pdb:
-    create: true
-    minAvailable: 1
