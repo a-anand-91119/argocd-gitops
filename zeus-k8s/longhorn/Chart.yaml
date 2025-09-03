@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: longhorn
+description: Sub-chart for Longhorn
+type: application
+version: 1.0.0
+appVersion: 1.9.1
+dependencies:
+  - name: longhorn
+    version: 1.9.1
+    repository: https://charts.longhorn.io
