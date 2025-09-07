@@ -1,5 +1,5 @@
 prometheus-kafka-exporter:
-  replicaCount: 2
+  replicaCount: 0
   kafkaServer:
     - apache-kafka.kafka.svc.cluster.local:9092
   verbosity: 4
