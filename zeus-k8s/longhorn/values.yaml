@@ -1,9 +1,0 @@
-longhorn:
-  namespace: longhorn-system
-  defaultBackupStore:
-    backupTarget: nfs://192.168.0.127:/mnt/user/Backup/longhorn
-    preUpgradeChecker:
-      jobEnabled: true
-  priorityClassCreate: true
-  crds:
-    enabled: true

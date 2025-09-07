@@ -3,18 +3,34 @@ kind: Application
 metadata:
   name: longhorn
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
 spec:
   destination:
     namespace: longhorn-system
     server: https://kubernetes.default.svc
   project: zeus-kubernetes
   source:
-    path: zeus-k8s/longhorn
-    repoURL: ssh://git@gitlab.notyouraverage.dev:8443/a.anand.91119/argocd-gitops.git
-    targetRevision: HEAD
+    chart: longhorn
+    repoURL: https://charts.longhorn.io
+    targetRevision: 1.9.1
+    helm:
+      skipCrds: true
+      values: |
+        namespace: longhorn-system
+        defaultBackupStore:
+          backupTarget: nfs://192.168.0.127:/mnt/user/Backup/longhorn
+        preUpgradeChecker:
+          jobEnabled: false
+        priorityClassCreate: true
   syncPolicy:
     automated: {}
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
       - Replace=true
+    ignoreDifferences:
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+      jqPathExpressions:
+      - '.spec.conversion.webhook.clientConfig.caBundle'

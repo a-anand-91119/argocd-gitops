@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: longhorn-crds
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  destination:
+    namespace: longhorn-system
+    server: https://kubernetes.default.svc
+  project: zeus-kubernetes
+  source:
+    chart: longhorn
+    repoURL: https://charts.longhorn.io
+    targetRevision: 1.9.1
+    helm:
+      skipCrds: false
+      values: |
+        longhornManager:
+          enabled: false
+        longhornDriver:
+          enabled: false
+        longhornUI:
+          enabled: false
+        longhornConversionWebhook:
+          enabled: false
+        longhornAdmissionWebhook:
+          enabled: false
+        longhornRecoveryBackend:
+          enabled: false
+        csi:
+          enabled: false
+  syncPolicy:
+    automated: {}
+    syncOptions:
+      - CreateNamespace=true
+      - Replace=true
