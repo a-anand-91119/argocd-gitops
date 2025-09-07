@@ -3,5 +3,5 @@ longhorn:
   defaultBackupStore:
     backupTarget: nfs://192.168.0.127:/mnt/user/Backup/longhorn
     preUpgradeChecker:
-      jobEnabled: false
+      jobEnabled: true
   priorityClassCreate: true
