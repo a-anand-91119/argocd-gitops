@@ -5,3 +5,5 @@ longhorn:
     preUpgradeChecker:
       jobEnabled: true
   priorityClassCreate: true
+  crds:
+    enabled: true
