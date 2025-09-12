@@ -26,11 +26,6 @@ vault:
       size: 5Gi
       storageClass: null
       accessMode: ReadWriteOnce
-    ingress:
-      enabled: true
-      ingressClassName: cloudflare-tunnel
-      hosts:
-        - name: vault-k8s.notyouraverage.dev
   ui:
     enabled: true
     serviceType: LoadBalancer
