@@ -1,5 +1,4 @@
 kafka-ui:
-  namespace: dev-tools
   envs:
     config: |
       dynamic:
