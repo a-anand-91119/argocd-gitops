@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: confluent-operator
+description: Sub-chart for confluent-operator
+type: application
+version: 1.0.0
+appVersion: 3.0.0
+dependencies:
+  - name: confluent-for-kubernetes
+    version: 3.0.0
+    repository: https://packages.confluent.io/helm
