@@ -4,8 +4,8 @@ name: confluent-operator
 description: Sub-chart for confluent-operator
 type: application
 version: 1.0.0
-appVersion: 3.0.0
+appVersion: 0.1263.8
 dependencies:
   - name: confluent-for-kubernetes
-    version: 3.0.0
+    version: 0.1263.8
     repository: https://packages.confluent.io/helm
