@@ -1,5 +1,5 @@
 kafka-ui:
-  yamlApplicationConfig: |
+  yamlApplicationConfig:
     dynamic:
       config:
         enabled: true
