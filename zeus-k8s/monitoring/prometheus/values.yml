@@ -2,22 +2,12 @@ kube-prometheus-stack:
   grafana:
     adminUser: admin
     adminPassword: admin
-    ingress:
-      enabled: true
-      ingressClassName: cloudflare-tunnel
-      hosts:
-        - grafana-k8s.notyouraverage.dev
   prometheus:
     prometheusSpec:
       ruleSelectorNilUsesHelmValues: false
       serviceMonitorSelectorNilUsesHelmValues: false
       podMonitorSelectorNilUsesHelmValues: false
       probeSelectorNilUsesHelmValues: false
-    ingress:
-      enabled: true
-      ingressClassName: cloudflare-tunnel
-      hosts:
-        - prometheus-k8s.notyouraverage.dev
   alertmanager:
     service:
       type: LoadBalancer
