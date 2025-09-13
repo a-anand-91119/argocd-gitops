@@ -1,0 +1,17 @@
+kafka-ui:
+  namespace: dev-tools
+  envs:
+    config: |
+      dynamic:
+        config:
+          enabled: true
+      kafka:
+        clusters:
+          - name: "Internal Kafka Cluster"
+            bootstrapServers: "kafka.kafka.svc.cluster.local:9092"
+      auth:
+        type: disabled
+      management:
+        health:
+          ldap:
+            enabled: false

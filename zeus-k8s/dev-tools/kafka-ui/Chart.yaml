@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: kafka-ui
+description: Sub-chart for kafka-ui
+type: application
+version: 1.0.0
+appVersion: 2024.7.3-rc.0
+dependencies:
+  - name: kafka-ui
+    version: 2024.7.3-rc.0
+    repository: https://charts.appscode.com/stable/
