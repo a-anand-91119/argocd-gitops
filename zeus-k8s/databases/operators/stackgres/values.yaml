@@ -1,4 +1,5 @@
 stackgres-operator:
+  skipCRDs: false
   adminui:
     service:
       type: ClusterIP
