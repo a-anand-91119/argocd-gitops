@@ -1,0 +1,22 @@
+crowdsec:
+  container_runtime: containerd
+  agent:
+    acquisition:
+      - namespace: traefik
+        podName: traefik-*
+        program: traefik
+    env:
+      - name: COLLECTIONS
+        value: "crowdsecurity/traefik"
+  lapi:
+    replicas: 3
+    env:
+      - name: ENROLL_KEY
+        valueFrom:
+          secretKeyRef:
+            name: crowdsec-lapi-enroll-key
+            key: enroll-key
+      - name: ENROLL_INSTANCE_NAME
+        value: "zeus-k8s-cluster"
+      - name: ENROLL_TAGS
+        value: "k8s bare-metal zeus"

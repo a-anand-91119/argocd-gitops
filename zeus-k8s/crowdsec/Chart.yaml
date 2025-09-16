@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: crowdsec
+description: Sub-chart for crowdsec
+type: application
+version: 1.0.0
+appVersion: 0.20.0
+dependencies:
+  - name: crowdsec
+    version: 0.20.0
+    repository: https://crowdsecurity.github.io/helm-charts
