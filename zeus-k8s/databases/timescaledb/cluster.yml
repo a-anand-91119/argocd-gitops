@@ -1,0 +1,14 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: cnpg-timescaledb-17
+  namespace: timescaledb
+spec:
+  instances: 3
+  imageCatalogRef:
+    name: cnpg-timescaledb-17
+    major: 17
+  imagePullPolicy: IfNotPresent
+  postgresUID: 70
+  postgresGID: 70
