@@ -11,6 +11,12 @@ spec:
     kind: ImageCatalog
     name: cnpg-timescaledb-17
     major: 17
+  storage:
+    storageClass: longhorn
+    size: 10Gi
+  walStorage:
+    storageClass: longhorn
+    size: 5Gi
   imagePullPolicy: IfNotPresent
   postgresUID: 70
   postgresGID: 70
