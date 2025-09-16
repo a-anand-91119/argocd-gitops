@@ -4,8 +4,8 @@ name: cloudnative-pg
 description: Sub-chart for cloudnative-pg
 type: application
 version: 1.0.0
-appVersion: 0.23.2
+appVersion: 0.26.0
 dependencies:
   - name: cloudnative-pg
-    version: 0.23.2
+    version: 0.26.0
     repository: https://cloudnative-pg.io/charts/
