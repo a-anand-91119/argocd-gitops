@@ -8,5 +8,3 @@ spec:
   images:
     - major: 17
       image: timescale/timescaledb-ha:pg17-ts2.21
-      postgresUID: 70
-      postgresGID: 70

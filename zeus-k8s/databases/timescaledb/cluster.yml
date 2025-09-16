@@ -18,5 +18,5 @@ spec:
     storageClass: longhorn
     size: 5Gi
   imagePullPolicy: IfNotPresent
-  postgresUID: 70
-  postgresGID: 70
+  postgresUID: 1000
+  postgresGID: 1000
