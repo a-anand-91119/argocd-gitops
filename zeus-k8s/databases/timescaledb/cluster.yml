@@ -7,6 +7,8 @@ metadata:
 spec:
   instances: 3
   imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ImageCatalog
     name: cnpg-timescaledb-17
     major: 17
   imagePullPolicy: IfNotPresent
