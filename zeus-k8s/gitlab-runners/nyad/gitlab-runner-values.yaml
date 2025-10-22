@@ -1,6 +1,6 @@
 ---
 gitlab-runner:
-  replicas: 20
+  replicas: 6
   revisionHistoryLimit: 3
   gitlabUrl: "https://gitlab.notyouraverage.dev/"
   concurrent: 20
