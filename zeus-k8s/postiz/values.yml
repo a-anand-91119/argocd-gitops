@@ -37,7 +37,7 @@ postiz-app:
   env:
     # Public URLs
     FRONTEND_URL: "https://postiz.k8s.notyouraverage.dev"
-    NEXT_PUBLIC_BACKEND_URL: "https://postiz.k8s.notyouraverage.dev"
+    NEXT_PUBLIC_BACKEND_URL: "https://postiz.k8s.notyouraverage.dev/api"
     BACKEND_INTERNAL_URL: "http://localhost:3000"
 
     # Self-hosting flag (REQUIRED)
