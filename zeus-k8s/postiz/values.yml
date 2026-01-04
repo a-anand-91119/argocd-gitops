@@ -48,7 +48,7 @@ postiz-app:
     NEXT_PUBLIC_UPLOAD_STATIC_DIRECTORY: ""
 
     # Registration - set to "true" after first user signup
-    DISABLE_REGISTRATION: "false"
+    DISABLE_REGISTRATION: "true"
 
     # Build configuration
     NX_ADD_PLUGINS: "false"
