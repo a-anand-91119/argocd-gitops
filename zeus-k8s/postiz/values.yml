@@ -54,12 +54,6 @@ postiz-app:
     # Build configuration
     NX_ADD_PLUGINS: "false"
 
-  # Secrets reference (populated by SealedSecret)
-  secrets:
-    DATABASE_URL: ""
-    REDIS_URL: ""
-    JWT_SECRET: ""
-
   # Persistent storage for uploads (using Longhorn)
   extraVolumes:
     - name: uploads-volume
