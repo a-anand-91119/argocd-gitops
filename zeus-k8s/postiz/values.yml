@@ -1,0 +1,75 @@
+---
+postiz-app:
+  # Replica configuration
+  replicaCount: 1
+
+  # Image configuration
+  image:
+    repository: ghcr.io/gitroomhq/postiz-app
+    pullPolicy: IfNotPresent
+    tag: "latest"
+
+  # Service configuration
+  service:
+    type: ClusterIP
+    port: 80
+
+  # Disable bundled databases (using existing infrastructure)
+  postgresql:
+    enabled: false
+
+  redis:
+    enabled: false
+
+  # Resource limits
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+
+  # Pod annotations for Linkerd service mesh
+  podAnnotations:
+    linkerd.io/inject: enabled
+
+  # Environment variables
+  env:
+    # Public URLs
+    FRONTEND_URL: "https://postiz.k8s.notyouraverage.dev"
+    NEXT_PUBLIC_BACKEND_URL: "https://postiz.k8s.notyouraverage.dev"
+    BACKEND_INTERNAL_URL: "http://localhost:3000"
+
+    # Self-hosting flag (REQUIRED)
+    IS_GENERAL: "true"
+
+    # Upload configuration
+    UPLOAD_DIRECTORY: "/uploads"
+    NEXT_PUBLIC_UPLOAD_STATIC_DIRECTORY: ""
+
+    # Registration - set to "true" after first user signup
+    DISABLE_REGISTRATION: "false"
+
+    # Build configuration
+    NX_ADD_PLUGINS: "false"
+
+  # Secrets reference (populated by SealedSecret)
+  secrets:
+    DATABASE_URL: ""
+    REDIS_URL: ""
+    JWT_SECRET: ""
+
+  # Persistent storage for uploads (using Longhorn)
+  extraVolumes:
+    - name: uploads-volume
+      persistentVolumeClaim:
+        claimName: postiz-uploads-pvc
+
+  extraVolumeMounts:
+    - name: uploads-volume
+      mountPath: /uploads
+
+  # Ingress disabled (will use Newt later)
+  ingress:
+    enabled: false

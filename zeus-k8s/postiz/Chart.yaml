@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: postiz
+description: Postiz social media scheduling application
+type: application
+version: 1.0.0
+appVersion: "1.3.0"
+dependencies:
+  - name: postiz-app
+    version: 1.0.5
+    repository: oci://ghcr.io/gitroomhq/postiz-helmchart/charts
