@@ -24,10 +24,10 @@ postiz-app:
   # Resource limits
   resources:
     limits:
-      memory: 2G
+      memory: 3G
     requests:
       cpu: 200m
-      memory: 2G
+      memory: 3G
 
   # Pod annotations for Linkerd service mesh
   podAnnotations:
