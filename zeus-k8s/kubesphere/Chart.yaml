@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: keda
+description: Sub-chart for Kubesphere
+type: application
+version: 1.0.0
+appVersion: 0.3.1
+dependencies:
+  - name: ks-installer
+    version: 0.3.1
+    repository: https://charts.kubesphere.io/main
