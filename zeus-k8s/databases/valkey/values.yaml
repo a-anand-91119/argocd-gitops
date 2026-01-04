@@ -1,15 +1,38 @@
 valkey:
-  sentinels:
-    enabled: true
-    persistence:
-      enabled: true
-      storageClass: longhorn
+  image:
+    registry: docker.io
+    repository: valkey/valkey
+    pullPolicy: IfNotPresent
+
   auth:
-    existingSecret: valkey-credentials
-    existingSecretPasswordKey: password
-  primary:
-    persistence:
-      storageClass: longhorn
+    enabled: true
+    usersExistingSecret: valkey-credentials
+    aclUsers:
+      default:
+        permissions: "~* &* +@all"
+        passwordKey: password
+
   replica:
+    enabled: true
+    replicas: 2
     persistence:
+      size: 5Gi
       storageClass: longhorn
+
+  dataStorage:
+    enabled: true
+    requestedSize: 5Gi
+    className: longhorn
+
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
