@@ -26,6 +26,68 @@ vault:
       size: 5Gi
       storageClass: null
       accessMode: ReadWriteOnce
+    extraContainers:
+      - name: auto-unseal
+        image: hashicorp/vault:1.20.1
+        command:
+          - /bin/sh
+          - -c
+          - |
+            sleep 15
+            while true; do
+              vault status > /dev/null 2>&1
+              if [ $? -eq 2 ]; then
+                echo "$(date) - Vault is sealed, unsealing..."
+                vault operator unseal "$UNSEAL_KEY_1"
+                vault operator unseal "$UNSEAL_KEY_2"
+                vault operator unseal "$UNSEAL_KEY_3"
+                vault operator unseal "$UNSEAL_KEY_4"
+                vault operator unseal "$UNSEAL_KEY_5"
+                vault operator unseal "$UNSEAL_KEY_6"
+                echo "$(date) - Unseal complete"
+              fi
+              sleep 10
+            done
+        env:
+          - name: VAULT_ADDR
+            value: "http://127.0.0.1:8200"
+          - name: UNSEAL_KEY_1
+            valueFrom:
+              secretKeyRef:
+                name: vault-unseal-keys
+                key: key1
+          - name: UNSEAL_KEY_2
+            valueFrom:
+              secretKeyRef:
+                name: vault-unseal-keys
+                key: key2
+          - name: UNSEAL_KEY_3
+            valueFrom:
+              secretKeyRef:
+                name: vault-unseal-keys
+                key: key3
+          - name: UNSEAL_KEY_4
+            valueFrom:
+              secretKeyRef:
+                name: vault-unseal-keys
+                key: key4
+          - name: UNSEAL_KEY_5
+            valueFrom:
+              secretKeyRef:
+                name: vault-unseal-keys
+                key: key5
+          - name: UNSEAL_KEY_6
+            valueFrom:
+              secretKeyRef:
+                name: vault-unseal-keys
+                key: key6
+        resources:
+          requests:
+            memory: 16Mi
+            cpu: 10m
+          limits:
+            memory: 32Mi
+            cpu: 50m
   ui:
     enabled: true
     serviceType: LoadBalancer
