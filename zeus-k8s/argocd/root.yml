@@ -1,0 +1,46 @@
+# WARNING: NEVER delete this Application without `--cascade=orphan`.
+# A naive `kubectl delete app root -n argocd` walks the app graph and
+# cascade-deletes every child Application plus their workloads. This file
+# deliberately OMITS the ArgoCD resources finalizer from metadata:
+# that absence is the primary R2 mitigation. Do not add one. Children in
+# applications/_TEMPLATE.yml carry it; root must not.
+#
+# The `argocd.argoproj.io/deletion-protection: "true"` annotation below is
+# harmless metadata on ArgoCD 2.12.4 -- it is not a recognized native
+# annotation in this version. It is a placeholder, pulled forward from
+# Phase 6 (HRD-04), to be re-evaluated then (possibly replaced with
+# `argocd.argoproj.io/sync-options: Delete=confirm` on a 2.14+ upgrade).
+# See .planning/phases/02-.../02-RESEARCH.md Open Questions Section 1.
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/deletion-protection: "true"
+    app.kubernetes.io/managed-by: argocd-gitops-repo
+spec:
+  project: zeus-kubernetes
+  source:
+    repoURL: ssh://git@gitlab.notyouraverage.dev:8443/a.anand.91119/argocd-gitops.git
+    targetRevision: HEAD
+    path: zeus-k8s/argocd/applications
+    directory:
+      recurse: false
+      exclude: "_*.yml"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+    retry:
+      limit: 3
+      backoff:
+        duration: 30s
+        factor: 2
+        maxDuration: 5m

@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: zeus-kubernetes
+  namespace: argocd
+spec:
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  destinations:
+    - namespace: '*'
+      server: '*'
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  orphanedResources: {}
+  sourceRepos:
+    - '*'
+  # The 1m/`* * * * *` allow window in Asia/Kolkata is a 100% duty cycle in
+  # practice (a 60-second window renewed every minute). It is permanently
+  # open by design and preserved verbatim -- see PROJECT.md "Out of Scope".
+  # Future operator: do NOT "fix" this. It is not a bug.
+  syncWindows:
+    - applications:
+        - '*'
+      clusters:
+        - '*'
+      duration: 1m
+      kind: allow
+      manualSync: true
+      namespaces:
+        - '*'
+      schedule: '* * * * *'
+      timeZone: Asia/Kolkata

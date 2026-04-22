@@ -1,0 +1,56 @@
+# _TEMPLATE.yml -- reference child Application manifest.
+#
+# To add a new app:
+#   1. `cp _TEMPLATE.yml <app-name>.yml`  (NO leading underscore on real children)
+#   2. Fill every `<PLACEHOLDER>` below. Remove comments/blocks you do not use.
+#   3. Commit. Root will pick it up on the next sync.
+#
+# CRITICAL: the filename MUST end in `.yml`, NOT `.yaml`. Root's
+# `directory.exclude: "_*.yml"` uses Go `filepath.Match`, which is
+# extension-sensitive. Renaming this file to `_TEMPLATE.yaml` would make it
+# a live child Application at the next root sync (placeholders and all).
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: <APP_NAME>                 # kebab-case; usually matches the folder under zeus-k8s/
+  namespace: argocd
+  annotations:
+    # Sync-wave bands (see zeus-k8s/argocd/README.md "Adding an app"):
+    #   -30 sealed-secrets    -25 namespaces    -20 secrets
+    #   -15 operators         -10 infra          -5 tunnels
+    #     0 vault              +5 CRs           +10 DBs
+    #   +15 middleware       +20 ingress-adj   +25 runners
+    #   +30 apps             +35 ingresses
+    # Gaps of 5 between bands -- leave room for future insertions.
+    argocd.argoproj.io/sync-wave: "<WAVE>"
+    app.kubernetes.io/managed-by: argocd-gitops-repo
+  finalizers:
+    # Children DO get the resources-finalizer. Only root.yml omits it.
+    # This enables `kubectl delete app <name>` to garbage-collect workloads.
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: zeus-kubernetes
+  source:
+    repoURL: ssh://git@gitlab.notyouraverage.dev:8443/a.anand.91119/argocd-gitops.git
+    targetRevision: HEAD
+    path: zeus-k8s/<PATH>          # e.g. zeus-k8s/newt, zeus-k8s/databases/timescaledb
+    # directory:                   # Uncomment ONLY if <PATH> has subdirs worth walking.
+    #   recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: <DEST_NAMESPACE>    # Omit this line for cluster-scoped aggregators
+                                   # (namespaces, ingresses, cluster-wide secrets).
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    # syncOptions:                 # Uncomment options you need.
+    #   - CreateNamespace=true     # Use when destination.namespace may not exist yet.
+    #   - ServerSideApply=true     # Use for apps applying large CRDs (operators).
+    retry:
+      limit: 5                     # Children default to 5 (root.yml uses 3 -- more conservative).
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m
