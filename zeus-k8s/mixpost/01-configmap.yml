@@ -8,7 +8,7 @@ data:
   APP_NAME: "Mixpost"
   APP_ENV: "production"
   APP_DEBUG: "false"
-  APP_URL: "https://mixpost.notyouraverage.dev"
+  APP_URL: "https://mixpost.k8s.notyouraverage.dev"
   LOG_CHANNEL: "stderr"
   LOG_LEVEL: "info"
 
@@ -33,5 +33,5 @@ data:
   FILESYSTEM_DISK: "local"
 
   MAIL_MAILER: "log"
-  MAIL_FROM_ADDRESS: "no-reply@notyouraverage.dev"
+  MAIL_FROM_ADDRESS: "mixpost@notyouraverage.dev"
   MAIL_FROM_NAME: "Mixpost"
