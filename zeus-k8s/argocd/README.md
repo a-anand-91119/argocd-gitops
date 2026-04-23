@@ -141,3 +141,19 @@ Unlike root, children DO carry `resources-finalizer.argocd.argoproj.io`
 ArgoCD cleans up the child's managed resources. If a child is stuck
 terminating, check the ArgoCD controller logs -- usually a
 still-referenced CR blocking finalization.
+
+## Note on deletion-protection (HRD-04)
+
+`root.yml` carries `argocd.argoproj.io/deletion-protection: "true"`. On ArgoCD
+2.14+ this annotation prevents `kubectl delete app root` from succeeding without
+explicit override. On this cluster's ArgoCD 2.12.4 the annotation is harmless
+metadata; real enforcement requires an upgrade.
+
+Until the 2.14+ upgrade, the primary R2 (cascade-delete) mitigation rests on
+`root.yml` deliberately OMITTING the `resources-finalizer` — deleting the root
+Application with default `--cascade=foreground` orphans children rather than
+destroying them. See the top-of-file comment in `root.yml` and the project
+safety section of this README for the full rationale.
+
+On upgrade to 2.14+, additionally consider `sync-options: Delete=confirm` for
+belt-and-braces protection.
