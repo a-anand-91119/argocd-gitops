@@ -50,7 +50,7 @@ spec:
               port: http
             periodSeconds: 10
             timeoutSeconds: 5
-            failureThreshold: 60
+            failureThreshold: 180
           readinessProbe:
             httpGet:
               path: /
@@ -68,9 +68,9 @@ spec:
           resources:
             requests:
               cpu: 200m
-              memory: 1Gi
+              memory: 5Gi
             limits:
-              memory: 1Gi
+              memory: 5Gi
       volumes:
         - name: storage
           persistentVolumeClaim:
