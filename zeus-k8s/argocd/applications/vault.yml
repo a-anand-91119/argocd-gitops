@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: '0'
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    app.kubernetes.io/managed-by: argocd-gitops-repo
+  name: vault
+  namespace: argocd
+spec:
+  destination:
+    namespace: vault
+    server: https://kubernetes.default.svc
+  ignoreDifferences:
+    - group: apps
+      jsonPointers:
+        - /spec/volumeClaimTemplates/0/apiVersion
+        - /spec/volumeClaimTemplates/0/kind
+        - /spec/volumeClaimTemplates/0/status
+        - /spec/volumeClaimTemplates/0/spec/volumeMode
+        - /spec/volumeClaimTemplates/1/apiVersion
+        - /spec/volumeClaimTemplates/1/kind
+        - /spec/volumeClaimTemplates/1/status
+        - /spec/volumeClaimTemplates/1/spec/volumeMode
+      kind: StatefulSet
+  project: zeus-kubernetes
+  source:
+    helm:
+      valueFiles:
+        - values.yaml
+    path: zeus-k8s/vault
+    repoURL: ssh://git@gitlab.notyouraverage.dev:8443/a.anand.91119/argocd-gitops.git
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
