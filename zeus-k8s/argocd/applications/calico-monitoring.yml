@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: '-10'
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    app.kubernetes.io/managed-by: argocd-gitops-repo
+  name: calico-monitoring
+  namespace: argocd
+spec:
+  destination:
+    namespace: calico-monitoring
+    server: https://kubernetes.default.svc
+  project: zeus-kubernetes
+  source:
+    path: zeus-k8s/calico-monitoring
+    repoURL: ssh://git@gitlab.notyouraverage.dev:8443/a.anand.91119/argocd-gitops.git
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
