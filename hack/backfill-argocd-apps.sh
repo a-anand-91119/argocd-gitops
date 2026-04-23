@@ -93,7 +93,7 @@ rm -f "$OUT_DIR"/*.yml
 # -----------------------------------------------------------------------------
 # Per-app generation.
 # -----------------------------------------------------------------------------
-STRIP='del(.status, .metadata.uid, .metadata.resourceVersion, .metadata.generation, .metadata.creationTimestamp, .metadata.managedFields, .metadata.ownerReferences)'
+STRIP='del(.status, .metadata.uid, .metadata.resourceVersion, .metadata.generation, .metadata.creationTimestamp, .metadata.managedFields, .metadata.ownerReferences, .metadata.annotations["kubectl.kubernetes.io/last-applied-configuration"])'
 
 generated=0
 for app in $(kubectl -n argocd get app -o jsonpath='{.items[*].metadata.name}'); do

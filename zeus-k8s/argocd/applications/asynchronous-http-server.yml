@@ -3,9 +3,6 @@ kind: Application
 metadata:
   annotations:
     argocd.argoproj.io/sync-wave: '30'
-    kubectl.kubernetes.io/last-applied-configuration: '{"apiVersion":"argoproj.io/v1alpha1","kind":"Application","metadata":{"annotations":{},"name":"asynchronous-http-server","namespace":"argocd"},"spec":{"destination":{"namespace":"spring-projects","server":"https://kubernetes.default.svc"},"project":"zeus-kubernetes","source":{"path":"zeus-k8s/spring-projects/asynchronous-http-server","repoURL":"ssh://git@gitlab.notyouraverage.dev:8443/a.anand.91119/argocd-gitops.git","targetRevision":"HEAD"},"syncPolicy":{"automated":{"prune":true,"selfHeal":true}}}}
-
-      '
   finalizers:
     - resources-finalizer.argocd.argoproj.io
   labels:
