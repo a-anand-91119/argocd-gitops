@@ -157,3 +157,68 @@ safety section of this README for the full rationale.
 
 On upgrade to 2.14+, additionally consider `sync-options: Delete=confirm` for
 belt-and-braces protection.
+
+## Disaster recovery
+
+A disaster-recovery drill proves the full cold-start path works end-to-end on a
+throwaway `kind` cluster. Run this whenever:
+
+- Sealed-secrets keys rotate or Vault storage changes
+- ArgoCD major version changes (e.g. 2.12 -> 2.13)
+- Anyone new inherits the runbook
+
+### Overview
+
+1. **Bring up a throwaway cluster:**
+   `kind create cluster --name argocd-dr --image kindest/node:v<PROD_K8S_VER>`
+2. **Install ArgoCD (HA manifest, matches prod):**
+   `kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/refs/tags/v2.12.4/manifests/ha/install.yaml`
+3. **Restore the sealed-secrets private key from Vault** (see command below)
+4. **Restore the repo SSH key from Vault** as an ArgoCD `repository` secret in
+   namespace `argocd`
+5. **Apply AppProject + root:**
+   `kubectl apply -f zeus-k8s/argocd/projects/zeus-kubernetes.yml` then
+   `kubectl apply -f zeus-k8s/argocd/root.yml`
+6. **Observe + verify:** `bash hack/dr-verify.sh` captures T+5m / T+15m
+   sync-wave snapshots, asserts strict band-to-band ordering, and confirms the
+   round-trip SealedSecret decrypts
+7. **Tear down:** `kind delete cluster --name argocd-dr`
+
+### Sealed-secrets key: export from Vault, import to DR cluster
+
+```bash
+# Read the Vault-backed sealed-secrets private key (parameters substitute per
+# operator Vault layout):
+vault kv get -format=yaml <VAULT_PATH_TO_SEALED_SECRETS_KEY> \
+  | yq -y '.data.data' \
+  | kubectl apply -n kube-system -f -
+
+# Restart the controller so it picks up the imported key instead of its
+# self-generated default:
+kubectl -n kube-system rollout restart deploy sealed-secrets-controller
+kubectl -n kube-system rollout status deploy sealed-secrets-controller --timeout=120s
+```
+
+On successful import, any committed `SealedSecret` (e.g.
+`zeus-k8s/secrets/localstack-auth-token.yml`) will decrypt to a `Secret` in its
+target namespace within ~60s after the `namespaces` and `secrets` Applications
+sync.
+
+### Full runbook
+
+The authoritative, copy-pasteable, end-to-end procedure lives at
+[`docs/runbooks/disaster-recovery.md`](../../docs/runbooks/disaster-recovery.md).
+Follow it verbatim; do not paraphrase during a real emergency.
+
+### Teardown
+
+After evidence is captured
+(`.planning/phases/07-disaster-recovery-verification/07-DR-EVIDENCE.md`,
+`07-DR-EVENTS.txt`, `07-DR-APP-LIST.txt`):
+
+```bash
+kind delete cluster --name argocd-dr
+```
+
+If teardown hangs or fails, fall back to
+`docker rm -f $(docker ps -a --filter 'name=argocd-dr-control-plane' -q)`.
