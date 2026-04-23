@@ -1,0 +1,47 @@
+---
+# mariadb-mixpost: MariaDB Galera CR + Database + User + Grant bundle for mixpost.
+#
+# source.path is the PARENT directory (zeus-k8s/databases/mariadb) with
+# directory.recurse: true — locked in 03-CONTEXT.md as the user's preferred
+# future-proof shape. Today zeus-k8s/databases/mariadb/ contains only the
+# mariadb-mixpost/ subdirectory with 4 CR YAMLs, so behavior is equivalent to
+# targeting the subdir directly. Accepted trade-off: any future
+# zeus-k8s/databases/mariadb/<other>/ subdir joins THIS Application unless
+# consciously moved out or scoped to its own Application file.
+#
+# destination.namespace is `mariadb` (not `mariadb-mixpost`) — the CRs live in
+# the `mariadb` namespace consumed by the mariadb-operator.
+#
+# No syncOptions required: operator handles CreateNamespace; no SSA needed for
+# MariaDB/Database/User/Grant CRs.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mariadb-mixpost
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+    app.kubernetes.io/managed-by: argocd-gitops-repo
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: zeus-kubernetes
+  source:
+    repoURL: ssh://git@gitlab.notyouraverage.dev:8443/a.anand.91119/argocd-gitops.git
+    targetRevision: HEAD
+    path: zeus-k8s/databases/mariadb
+    directory:
+      recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mariadb
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m

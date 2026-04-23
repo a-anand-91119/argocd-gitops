@@ -1,0 +1,39 @@
+---
+# mixpost: application workload (ConfigMap + PVC + Deployment + Service).
+#
+# Flat directory pattern — no `directory` block. ArgoCD auto-syncs the 4
+# files under zeus-k8s/mixpost/ (01-configmap.yml, 02-pvc.yml,
+# 03-deployment.yml, 04-service.yml) in filename order.
+#
+# Wave 30 (application band) — runs after the mariadb-mixpost Galera CR
+# reaches Healthy at wave 10, so the schema + user exist by the time
+# mixpost pods start up.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mixpost
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "30"
+    app.kubernetes.io/managed-by: argocd-gitops-repo
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: zeus-kubernetes
+  source:
+    repoURL: ssh://git@gitlab.notyouraverage.dev:8443/a.anand.91119/argocd-gitops.git
+    targetRevision: HEAD
+    path: zeus-k8s/mixpost
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mixpost
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m

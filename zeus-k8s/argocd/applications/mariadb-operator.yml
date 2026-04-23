@@ -1,0 +1,45 @@
+---
+# mariadb-operator: Helm sub-chart Application for mariadb-operator + mariadb-operator-crds.
+#
+# Wave -15 (operator band) lands ahead of mariadb-mixpost at wave +10 — the 25-wave
+# gap is R6 (CRD-availability timing) structural mitigation. Child retry.limit 5 with
+# 10s->3m backoff absorbs any transient CRD-not-ready error on the first Phase 4 sync.
+#
+# CreateNamespace=true is belt-and-braces vs the cluster-scoped `namespaces` app
+# (wave -25) which also provisions the mariadb-operator namespace. Cheap redundancy.
+# ServerSideApply=true is required for CRD volume on first install.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mariadb-operator
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-15"
+    app.kubernetes.io/managed-by: argocd-gitops-repo
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: zeus-kubernetes
+  source:
+    repoURL: ssh://git@gitlab.notyouraverage.dev:8443/a.anand.91119/argocd-gitops.git
+    targetRevision: HEAD
+    path: zeus-k8s/databases/operators/mariadb-operator
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mariadb-operator
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m
