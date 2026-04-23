@@ -40,27 +40,33 @@ spec:
               subPath: logs
           # start.sh does a recursive chown over 16k+ vendor files plus
           # cp of commands/migrations + legacy-migration SQL work before
-          # Apache binds to :80. On Longhorn-backed first-boot this can
-          # take 5-10 min. startupProbe gives 10 min before liveness/
-          # readiness kick in; without it, liveness SIGKILLs (exit 137)
-          # mid-chown and the pod crash-loops indefinitely.
+          # nginx binds to :80. On Longhorn-backed first-boot this can
+          # take 5-10 min; startupProbe's 30-min window (180*10s) covers
+          # this so liveness/readiness don't SIGKILL (exit 137) mid-chown.
+          #
+          # Probe path is /mixpost/login (not /), because the app's
+          # APP_URL is https://mixpost.notyouraverage.dev and GET / on
+          # port 80 returns 302 to https://.../mixpost. K8s httpGet
+          # follows redirects, so the probe then tries HTTPS on :80 and
+          # fails with "server gave HTTP response to HTTPS client".
+          # /mixpost/login returns 200 directly with no redirect.
           startupProbe:
             httpGet:
-              path: /
+              path: /mixpost/login
               port: http
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 180
           readinessProbe:
             httpGet:
-              path: /
+              path: /mixpost/login
               port: http
             periodSeconds: 15
             timeoutSeconds: 5
             failureThreshold: 6
           livenessProbe:
             httpGet:
-              path: /
+              path: /mixpost/login
               port: http
             periodSeconds: 30
             timeoutSeconds: 5
