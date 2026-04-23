@@ -41,7 +41,7 @@ spec:
             - |
               printf '#!/bin/sh\nexit 0\n' > /usr/local/bin/chown
               chmod +x /usr/local/bin/chown
-              exec /start.sh
+              exec /usr/local/bin/start.sh
           ports:
             - name: http
               containerPort: 80
