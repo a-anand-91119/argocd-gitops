@@ -1,0 +1,37 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mixpost-env
+  namespace: mixpost
+data:
+  APP_NAME: "Mixpost"
+  APP_ENV: "production"
+  APP_DEBUG: "false"
+  APP_URL: "https://mixpost.notyouraverage.dev"
+  LOG_CHANNEL: "stderr"
+  LOG_LEVEL: "info"
+
+  DB_CONNECTION: "mysql"
+  DB_HOST: "mariadb-mixpost.mariadb.svc.cluster.local"
+  DB_PORT: "3306"
+  DB_DATABASE: "mixpost"
+  DB_USERNAME: "mixpost"
+
+  BROADCAST_DRIVER: "log"
+  CACHE_DRIVER: "redis"
+  QUEUE_CONNECTION: "redis"
+  SESSION_DRIVER: "redis"
+  SESSION_LIFETIME: "120"
+
+  REDIS_CLIENT: "phpredis"
+  REDIS_HOST: "valkey.valkey.svc.cluster.local"
+  REDIS_PORT: "6379"
+  REDIS_DB: "0"
+  REDIS_CACHE_DB: "1"
+
+  FILESYSTEM_DISK: "local"
+
+  MAIL_MAILER: "log"
+  MAIL_FROM_ADDRESS: "no-reply@notyouraverage.dev"
+  MAIL_FROM_NAME: "Mixpost"

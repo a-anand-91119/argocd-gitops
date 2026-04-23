@@ -1,0 +1,15 @@
+---
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: User
+metadata:
+  name: mixpost
+  namespace: mariadb
+spec:
+  mariaDbRef:
+    name: mariadb-mixpost
+  passwordSecretKeyRef:
+    name: mariadb-mixpost-credentials
+    key: mixpost-password
+  host: "%"
+  maxUserConnections: 50
+  name: mixpost

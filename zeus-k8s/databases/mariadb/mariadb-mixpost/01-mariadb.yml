@@ -1,0 +1,53 @@
+---
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: MariaDB
+metadata:
+  name: mariadb-mixpost
+  namespace: mariadb
+spec:
+  rootPasswordSecretKeyRef:
+    name: mariadb-mixpost-credentials
+    key: root-password
+    generate: false
+  image: mariadb:11.4.10
+  port: 3306
+  replicas: 3
+  storage:
+    size: 10Gi
+    storageClassName: longhorn
+  resources:
+    requests:
+      cpu: 100m
+      memory: 1Gi
+    limits:
+      memory: 1Gi
+  myCnf: |
+    [mariadb]
+    bind-address=*
+    default_storage_engine=InnoDB
+    character-set-server=utf8mb4
+    collation-server=utf8mb4_unicode_ci
+    max_allowed_packet=256M
+    innodb_autoinc_lock_mode=2
+  galera:
+    enabled: true
+    primary:
+      podIndex: 0
+      automaticFailover: true
+    sst: mariabackup
+    replicaThreads: 1
+    agent:
+      port: 5555
+      kubernetesAuth:
+        enabled: true
+    recovery:
+      enabled: true
+      minClusterSize: "50%"
+      clusterHealthyTimeout: 30s
+      clusterBootstrapTimeout: 10m
+      podRecoveryTimeout: 3m
+      podSyncTimeout: 3m
+  podDisruptionBudget:
+    maxUnavailable: 1
+  metrics:
+    enabled: false

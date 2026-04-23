@@ -1,0 +1,14 @@
+---
+apiVersion: v2
+name: mariadb-operator
+description: Sub-chart for mariadb-operator
+type: application
+version: 1.0.0
+appVersion: 26.3.0
+dependencies:
+  - name: mariadb-operator-crds
+    version: 26.3.0
+    repository: https://helm.mariadb.com/mariadb-operator
+  - name: mariadb-operator
+    version: 26.3.0
+    repository: https://helm.mariadb.com/mariadb-operator
