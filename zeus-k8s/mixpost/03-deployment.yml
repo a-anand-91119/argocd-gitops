@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: mixpost
-          image: inovector/mixpost-lite:latest
+          image: inovector/mixpost:latest
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

@@ -12,8 +12,13 @@
 # destination.namespace is `mariadb` (not `mariadb-mixpost`) — the CRs live in
 # the `mariadb` namespace consumed by the mariadb-operator.
 #
-# No syncOptions required: operator handles CreateNamespace; no SSA needed for
-# MariaDB/Database/User/Grant CRs.
+# syncOptions: ServerSideApply=true + RespectIgnoreDifferences=true so that the
+# mariadb-operator's defaulting on the MariaDB CR (agent/config/galeraLibPath/
+# initContainer/recovery/sst — things the operator fills in server-side) does
+# not flap the Application as OutOfSync. ignoreDifferences via
+# managedFieldsManagers=[mariadb-operator] is the stable way to say "don't
+# diff fields owned by the operator" without enumerating a brittle jsonPointer
+# list that the operator's version bumps can invalidate.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -39,9 +44,17 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
+      - RespectIgnoreDifferences=true
     retry:
       limit: 5
       backoff:
         duration: 10s
         factor: 2
         maxDuration: 3m
+  ignoreDifferences:
+    - group: k8s.mariadb.com
+      kind: MariaDB
+      managedFieldsManagers:
+        - mariadb-operator
