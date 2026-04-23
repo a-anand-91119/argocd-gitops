@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: '35'
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    app.kubernetes.io/managed-by: argocd-gitops-repo
+  name: ingresses
+  namespace: argocd
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  project: zeus-kubernetes
+  source:
+    directory:
+      jsonnet: {}
+      recurse: true
+    path: zeus-k8s/ingress/ingresses
+    repoURL: ssh://git@gitlab.notyouraverage.dev:8443/a.anand.91119/argocd-gitops.git
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
