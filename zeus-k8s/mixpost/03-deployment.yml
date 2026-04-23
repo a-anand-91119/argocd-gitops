@@ -42,6 +42,43 @@ spec:
               printf '#!/bin/sh\nexit 0\n' > /usr/local/bin/chown
               chmod +x /usr/local/bin/chown
               exec /usr/local/bin/start.sh
+          # start.sh's admin-seed step is hardcoded to admin@example.com
+          # and the mixpost-auth:create command takes no --email/--password
+          # flags, so the ADMIN_EMAIL/ADMIN_NAME/ADMIN_PASSWORD env vars
+          # from mixpost-app-secrets are ignored by the upstream image.
+          # This postStart polls until migrations are done, then syncs the
+          # admin user from env (idempotent — no-op on restart if already
+          # matching) and removes the default admin@example.com if it was
+          # seeded. Without this the installed admin would be the default
+          # and the configured secret would be cosmetic.
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - |
+                    cd /var/www/html
+                    for i in $(seq 1 120); do
+                      php artisan tinker --execute='echo \Schema::hasTable("users") ? "ok" : "wait";' 2>/dev/null | grep -q ok && break
+                      sleep 5
+                    done
+                    php artisan tinker --execute='
+                      $cls = class_exists("Inovector\\MixpostAuth\\Models\\User")
+                        ? "Inovector\\MixpostAuth\\Models\\User"
+                        : "Inovector\\Mixpost\\Models\\User";
+                      $email = getenv("ADMIN_EMAIL");
+                      $name  = getenv("ADMIN_NAME") ?: "Admin";
+                      $pass  = getenv("ADMIN_PASSWORD");
+                      if (!$email || !$pass) { exit; }
+                      $u = $cls::firstOrNew(["email" => $email]);
+                      $u->name = $name;
+                      $u->password = bcrypt($pass);
+                      $u->save();
+                      if ($email !== "admin@example.com") {
+                        $cls::where("email","admin@example.com")->delete();
+                      }
+                    '
           ports:
             - name: http
               containerPort: 80
