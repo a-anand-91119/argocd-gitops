@@ -31,8 +31,8 @@ gitlab-runner:
     CACHE_TYPE: s3
     CACHE_MAX_UPLOADED_ARCHIVE_SIZE: 2147483648
     CACHE_S3_BUCKET_LOCATION: us-east-1
-    CACHE_S3_BUCKET_NAME: gitlab-runner-caches
-    CACHE_S3_SERVER_ADDRESS: s3.athena.notyouraverage.dev
+    CACHE_S3_BUCKET_NAME: gitlab-nyad-runner-caches
+    CACHE_S3_SERVER_ADDRESS: minio.athena.notyouraverage.dev
   extraEnvFrom:
     CACHE_S3_ACCESS_KEY:
       secretKeyRef:
