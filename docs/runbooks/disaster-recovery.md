@@ -35,16 +35,23 @@ terminal open (or re-export them).
 
 ```bash
 export PROD_KUBECTL_CONTEXT="<your prod context name, e.g. k3s-zeus>"
-export VAULT_ADDR="<your vault addr, e.g. https://vault.example.com>"
-export VAULT_PATH_SEALED_SECRETS="<kv path, e.g. secret/argocd/sealed-secrets-key>"
-export VAULT_PATH_REPO_SSH="<kv path, e.g. secret/argocd/repo-ssh-key>"
+export VAULT_ADDR="http://192.168.0.201:8200"    # in-cluster Vault, MetalLB LoadBalancer on zeus; reachable on home-lab LAN / VPN / tailscale only
+export VAULT_PATH_SEALED_SECRETS="<kv path — see discovery step below, e.g. secret/argocd/sealed-secrets-key>"
+export VAULT_PATH_REPO_SSH="<kv path — see discovery step below, e.g. secret/argocd/repo-ssh-key>"
 export GITLAB_REPO_URL="ssh://git@gitlab.notyouraverage.dev:8443/a.anand.91119/argocd-gitops.git"
 ```
 
 Verify local tooling is present:
 
 ```bash
-brew install kind docker vault kubectl jq yq
+# kind + kubectl + jq + yq from core brew:
+brew install kind kubectl jq yq
+# Vault CLI is not in core brew — use HashiCorp's tap OR direct binary:
+#   Option A (tap):    brew tap hashicorp/tap && brew install hashicorp/tap/vault
+#   Option B (binary): curl -LO "https://releases.hashicorp.com/vault/1.18.3/vault_1.18.3_darwin_arm64.zip" \
+#                       && unzip vault_*.zip && sudo mv vault /usr/local/bin/
+# If the tap errors with "Permission denied" on /opt/homebrew/Library/Taps:
+#   sudo chown -R "$(whoami):admin" /opt/homebrew/Library/Taps   # then re-run tap+install
 # Docker Desktop must be running (GUI) OR colima/orbstack started.
 docker info >/dev/null 2>&1 || { echo "FAIL: docker daemon not reachable"; exit 1; }
 ```
@@ -54,6 +61,22 @@ Authenticate to Vault (method depends on your environment):
 ```bash
 vault login <METHOD>    # e.g. -method=oidc, or token=<…>, or userpass
 vault token lookup >/dev/null 2>&1 || { echo "FAIL: vault not authenticated"; exit 1; }
+```
+
+Discover the KV paths for the sealed-secrets key and repo SSH key
+(run once; substitute the results back into `VAULT_PATH_SEALED_SECRETS`
+and `VAULT_PATH_REPO_SSH` above):
+
+```bash
+# List top-level KV mounts:
+vault secrets list -format=json | jq -r 'to_entries[] | select(.value.type=="kv" or .value.type=="kv-v2") | .key'
+# Browse likely locations (swap `secret/` for whatever mount your org uses):
+vault kv list secret/                    # look for argocd/, sealed-secrets, bitnami-sealed-secrets
+vault kv list secret/argocd/ 2>/dev/null # if it exists
+# Once you find the sealed-secrets key entry (usually contains `.crt`/`.key` fields or a single `tls.key` blob):
+vault kv get secret/argocd/sealed-secrets-key
+# Same for repo SSH key (look for `sshPrivateKey`, `ssh-privatekey`, or `identity` fields):
+vault kv get secret/argocd/repo-ssh-key
 ```
 
 Confirm VPN / tailscale is up and gitlab is reachable over SSH:

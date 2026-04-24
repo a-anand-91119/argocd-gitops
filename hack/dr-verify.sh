@@ -97,9 +97,13 @@ preflight() {
     fail=1
   fi
 
-  # Gate 10: disk space ≥10 GB free in $HOME
+  # Gate 10: disk space ≥10 GB free in $HOME (cross-platform: macOS df -g, Linux df -BG)
   local free_gb
-  free_gb=$(df -g "$HOME" | awk 'NR==2 {print $4}')
+  if df -g "$HOME" >/dev/null 2>&1; then
+    free_gb=$(df -g "$HOME" | awk 'NR==2 {print $4}')
+  else
+    free_gb=$(df -BG "$HOME" | awk 'NR==2 {gsub("G","",$4); print $4}')
+  fi
   if [ "${free_gb:-0}" -ge 10 ]; then
     pass "disk space OK (${free_gb} GB free in \$HOME)"
   else
