@@ -277,6 +277,37 @@ data:
             url: "https://unraid.notyouraverage.dev/"
             target: "_blank"
 
+      # -----------------------------------------------------------------
+      # Iris — apps published under *.iris.notyouraverage.dev
+      # (hosted on the Mac Mini, served publicly via Pangolin).
+      - name: "Iris"
+        icon: "fas fa-eye"
+        items:
+          - name: "Apollo"
+            subtitle: "apollo.iris.notyouraverage.dev"
+            tag: "iris"
+            icon: "fas fa-rocket"
+            url: "https://apollo.iris.notyouraverage.dev"
+            target: "_blank"
+          - name: "Finance"
+            subtitle: "finance.iris.notyouraverage.dev"
+            tag: "iris"
+            icon: "fas fa-coins"
+            url: "https://finance.iris.notyouraverage.dev"
+            target: "_blank"
+          - name: "Ledger"
+            subtitle: "ledger.iris.notyouraverage.dev"
+            tag: "iris"
+            icon: "fas fa-book"
+            url: "https://ledger.iris.notyouraverage.dev"
+            target: "_blank"
+          - name: "ReClip"
+            subtitle: "reclip.iris.notyouraverage.dev"
+            tag: "iris"
+            icon: "fas fa-paste"
+            url: "https://reclip.iris.notyouraverage.dev"
+            target: "_blank"
+
   # Tailscale-flavored variant of the dashboard. Loaded by Homer's hash
   # router when the user clicks the "Tailscale view" header link
   # (#tailscale → fetches assets/tailscale.yml and re-renders).
