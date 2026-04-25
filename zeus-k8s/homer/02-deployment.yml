@@ -58,6 +58,10 @@ spec:
               mountPath: /www/assets/tailscale.yml
               subPath: tailscale.yml
               readOnly: true
+            - name: config
+              mountPath: /www/assets/lan.yml
+              subPath: lan.yml
+              readOnly: true
           readinessProbe:
             httpGet:
               path: /
@@ -92,3 +96,5 @@ spec:
                 path: config.yml
               - key: tailscale.yml
                 path: tailscale.yml
+              - key: lan.yml
+                path: lan.yml

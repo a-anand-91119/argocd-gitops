@@ -42,6 +42,9 @@ data:
       - name: "Tailscale view"
         icon: "fas fa-network-wired"
         url: "#tailscale"
+      - name: "LAN view"
+        icon: "fas fa-house-laptop"
+        url: "#lan"
       - name: "Pangolin"
         icon: "fas fa-shield-alt"
         url: "https://pangolin.notyouraverage.dev"
@@ -308,6 +311,9 @@ data:
       - name: "Tailscale view"
         icon: "fas fa-network-wired"
         url: "#tailscale"
+      - name: "LAN view"
+        icon: "fas fa-house-laptop"
+        url: "#lan"
       - name: "Pangolin"
         icon: "fas fa-shield-alt"
         url: "https://pangolin.notyouraverage.dev"
@@ -358,4 +364,118 @@ data:
             tag: "edge"
             icon: "fas fa-shield-alt"
             url: "https://pangolin.notyouraverage.dev"
+            target: "_blank"
+
+  # LAN-flavored variant. Loaded by Homer's hash router on #lan.
+  # Replace every TODO_* with the actual private IP / port. Each entry
+  # works independently — partial fill-in is fine; just delete the items
+  # you don't have yet rather than leaving TODO URLs that 404. Keep the
+  # structure mirroring config.yml / tailscale.yml so views stay
+  # comparable. Reloader will roll the deployment after each edit.
+  lan.yml: |
+    title: "Notyouraverage"
+    subtitle: "homelab — LAN view"
+    documentTitle: "Homelab (LAN)"
+    icon: "fas fa-house-laptop"
+    header: true
+    footer: false
+    columns: "auto"
+    connectivityCheck: true
+
+    message:
+      style: "is-warning"
+      title: "LAN view"
+      icon: "fas fa-house-laptop"
+      content: "Direct private-IP access. Only works when you're on the home network. Fill in the TODO_* placeholders in lan.yml as IPs are confirmed."
+
+    links:
+      - name: "Public view"
+        icon: "fas fa-globe"
+        url: "#"
+      - name: "Tailscale view"
+        icon: "fas fa-network-wired"
+        url: "#tailscale"
+      - name: "LAN view"
+        icon: "fas fa-house-laptop"
+        url: "#lan"
+
+    defaults:
+      layout: columns
+      colorTheme: auto
+
+    theme: default
+
+    services:
+      # ---------------------------------------------------------------
+      - name: "Mac Mini (LAN)"
+        icon: "fab fa-apple"
+        items:
+          - name: "OpenClaw Gateway"
+            subtitle: "TODO — replace with http://<mac-mini-lan-ip>/overview"
+            tag: "lan"
+            icon: "fas fa-network-wired"
+            url: "http://TODO_MAC_MINI_LAN_IP/overview"
+            target: "_blank"
+          - name: "Iris Dashboard"
+            subtitle: "TODO — replace with http://<mac-mini-lan-ip>:8081/"
+            tag: "lan"
+            icon: "fas fa-eye"
+            url: "http://TODO_MAC_MINI_LAN_IP:8081/"
+            target: "_blank"
+
+      # ---------------------------------------------------------------
+      # Zeus Kubernetes — direct LoadBalancer / NodePort IPs (if any).
+      # Most k8s services are only exposed via the cloudflare-tunnel
+      # ingress, so they have no LAN URL. Add only the ones with a real
+      # LAN endpoint (e.g. MetalLB-assigned IP, NodePort).
+      - name: "Zeus K8s (LAN)"
+        icon: "fas fa-network-wired"
+        items:
+          - name: "ArgoCD"
+            subtitle: "TODO — LAN IP if exposed via MetalLB/NodePort"
+            tag: "lan"
+            logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/argocd.png"
+            url: "http://TODO_ARGOCD_LAN_IP"
+            target: "_blank"
+          - name: "Grafana"
+            subtitle: "TODO — LAN IP if exposed"
+            tag: "lan"
+            logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/grafana.png"
+            url: "http://TODO_GRAFANA_LAN_IP:3000"
+            target: "_blank"
+
+      # ---------------------------------------------------------------
+      # Athena (Proxmox host) — usually has a fixed LAN IP. Fill these in.
+      - name: "Athena (LAN)"
+        icon: "fas fa-server"
+        items:
+          - name: "Proxmox"
+            subtitle: "TODO — https://<proxmox-lan-ip>:8006"
+            tag: "lan"
+            logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/proxmox.png"
+            url: "https://TODO_PROXMOX_LAN_IP:8006"
+            target: "_blank"
+          - name: "MinIO Console"
+            subtitle: "TODO — http://<athena-lan-ip>:9001"
+            tag: "lan"
+            logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/minio.png"
+            url: "http://TODO_ATHENA_LAN_IP:9001"
+            target: "_blank"
+          - name: "n8n"
+            subtitle: "TODO — http://<athena-lan-ip>:5678"
+            tag: "lan"
+            logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/n8n.png"
+            url: "http://TODO_ATHENA_LAN_IP:5678"
+            target: "_blank"
+
+      # ---------------------------------------------------------------
+      # Zeus host (bare-metal) — services running directly on the host.
+      - name: "Zeus host (LAN)"
+        icon: "fas fa-hdd"
+        items:
+          - name: "Immich"
+            subtitle: "TODO — http://<zeus-lan-ip>:2283"
+            tag: "lan"
+            logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/immich.png"
+            url: "http://TODO_ZEUS_LAN_IP:2283"
             target: "_blank"
