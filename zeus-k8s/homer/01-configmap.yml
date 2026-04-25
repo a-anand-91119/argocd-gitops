@@ -1,13 +1,13 @@
 ---
 # Homer dashboard config. Single source of truth for the homelab landing page.
 #
-# To add a new entry: copy any `- name: ...` block under the relevant
-# `services[].items` and adjust. To switch between FontAwesome and a logo URL,
-# use either `icon: "fas fa-..."` OR `logo: "https://..."` (not both).
+# All URLs are Pangolin-fronted (auth-gated at the edge). To add a new entry:
+# copy any `- name:` block under the relevant `services[].items` and adjust.
+# Switch between FontAwesome and a logo URL via `icon:` OR `logo:` (not both).
 #
 # Mounted at /www/assets/config.yml in the b4bz/homer container.
-# Updates propagate on next browser refresh (no pod restart needed) — the
-# kubelet syncs the subPath-mounted ConfigMap within ~60s.
+# Updates propagate on next browser refresh — kubelet syncs the subPath-mounted
+# ConfigMap within ~60s (no pod restart needed).
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -58,107 +58,143 @@ data:
         link: "#3273dc"
         link-hover: "#ffdd57"
 
-    # Each top-level entry under `services` is a tab in Homer's UI.
-    # Within each tab, `items` is a flat list (no further grouping primitive
-    # — Homer only has tab → items, so we lean on tab names for location).
+    # Each top-level entry under `services` renders as a tab/section in Homer.
+    # Tabs grouped by location/domain. All URLs are Pangolin-fronted.
     services:
       # ---------------------------------------------------------------------
+      # Kubernetes cluster services — *.k8s.notyouraverage.dev
       - name: "Zeus K8s"
         icon: "fas fa-dharmachakra"
         items:
-          # --- Infra ---
           - name: "ArgoCD"
             subtitle: "GitOps controller"
             logo: "https://raw.githubusercontent.com/cncf/artwork/main/projects/argo/icon/color/argo-icon-color.png"
-            url: "https://argocd-k8s.notyouraverage.dev"
+            url: "https://argocd.k8s.notyouraverage.dev"
+            target: "_blank"
+            tag: "infra"
+          - name: "Grafana"
+            subtitle: "Dashboards"
+            logo: "https://grafana.com/static/img/menu/grafana2.svg"
+            url: "https://grafana.k8s.notyouraverage.dev"
+            target: "_blank"
+            tag: "obs"
+          - name: "Linkerd"
+            subtitle: "Service mesh"
+            logo: "https://raw.githubusercontent.com/cncf/artwork/main/projects/linkerd/icon/color/linkerd-icon-color.png"
+            url: "https://linkerd.k8s.notyouraverage.dev"
             target: "_blank"
             tag: "infra"
           - name: "Longhorn"
             subtitle: "Block storage"
             icon: "fas fa-hdd"
-            url: "https://longhorn-k8s.notyouraverage.dev"
+            url: "https://longhorn.k8s.notyouraverage.dev"
+            target: "_blank"
+            tag: "storage"
+          - name: "Vault"
+            subtitle: "Secrets"
+            icon: "fas fa-key"
+            url: "https://vault.k8s.notyouraverage.dev"
             target: "_blank"
             tag: "infra"
-          - name: "Linkerd"
-            subtitle: "Service mesh"
-            logo: "https://raw.githubusercontent.com/cncf/artwork/main/projects/linkerd/icon/color/linkerd-icon-color.png"
-            url: "https://linkerd-k8s.notyouraverage.dev"
+          - name: "StackGres"
+            subtitle: "Postgres operator UI"
+            icon: "fas fa-database"
+            url: "https://stackgres.k8s.notyouraverage.dev"
             target: "_blank"
-            tag: "infra"
-          # - name: "Vault"
-          #   subtitle: "Secrets"
-          #   logo: "https://raw.githubusercontent.com/hashicorp/vault/main/ui/public/eng-logos/vault.svg"
-          #   url: "https://vault-k8s.notyouraverage.dev"
-          #   target: "_blank"
-          #   tag: "infra"
-
-          # --- Apps ---
+            tag: "data"
+          - name: "MinIO Console"
+            subtitle: "Object storage UI"
+            logo: "https://min.io/resources/img/logo/MINIO_wordmark.png"
+            url: "https://minio-console.k8s.notyouraverage.dev"
+            target: "_blank"
+            tag: "storage"
+          - name: "MinIO S3"
+            subtitle: "S3 API endpoint"
+            icon: "fas fa-cube"
+            url: "https://s3.k8s.notyouraverage.dev"
+            target: "_blank"
+            tag: "api"
           - name: "Mixpost"
             subtitle: "Social scheduler"
             icon: "fas fa-share-alt"
-            url: "https://mixpost.notyouraverage.dev"
+            url: "https://mixpost.k8s.notyouraverage.dev"
             target: "_blank"
             tag: "app"
-          - name: "GitLab"
-            subtitle: "Self-hosted SCM"
-            logo: "https://about.gitlab.com/images/press/logo/png/gitlab-icon-1-color-black-rgb.png"
-            url: "https://gitlab.notyouraverage.dev"
-            target: "_blank"
-            tag: "app"
-          - name: "Pangolin"
-            subtitle: "Edge auth / SSO"
-            icon: "fas fa-shield-alt"
-            url: "https://pangolin.notyouraverage.dev"
-            target: "_blank"
-            tag: "app"
-          - name: "LocalStack"
-            subtitle: "Local AWS emulator"
-            icon: "fas fa-cloud"
-            url: "https://localstack-k8s.notyouraverage.dev"
-            target: "_blank"
-            tag: "app"
+          # Uncomment when ingresses land:
+          # - name: "Kafka UI"
+          #   icon: "fas fa-stream"
+          #   url: "https://kafka-ui.k8s.notyouraverage.dev"
+          #   target: "_blank"
+          # - name: "Prometheus"
+          #   icon: "fas fa-fire"
+          #   url: "https://prometheus.k8s.notyouraverage.dev"
+          #   target: "_blank"
 
-          # --- Storage & Data ---
-          - name: "MinIO Console"
-            subtitle: "Object storage UI (SSO-gated)"
+      # ---------------------------------------------------------------------
+      # Athena (Proxmox host) — *.athena.notyouraverage.dev
+      - name: "Athena (Proxmox)"
+        icon: "fas fa-server"
+        items:
+          - name: "Proxmox"
+            subtitle: "Hypervisor"
+            icon: "fas fa-microchip"
+            url: "https://proxmox.athena.notyouraverage.dev"
+            target: "_blank"
+            tag: "hypervisor"
+          - name: "MinIO Console (Athena)"
+            subtitle: "Proxmox-hosted object store UI"
             logo: "https://min.io/resources/img/logo/MINIO_wordmark.png"
             url: "https://minio.athena.notyouraverage.dev"
             target: "_blank"
             tag: "storage"
-          - name: "MinIO S3 API"
-            subtitle: "S3-compatible endpoint"
-            icon: "fas fa-database"
+          - name: "MinIO S3 (Athena)"
+            subtitle: "S3 API — gitlab runner cache lives here"
+            icon: "fas fa-cube"
             url: "https://s3.athena.notyouraverage.dev"
             target: "_blank"
             tag: "api"
+          - name: "Excalidraw"
+            subtitle: "Whiteboarding"
+            icon: "fas fa-pencil-ruler"
+            url: "https://excalidraw.athena.notyouraverage.dev"
+            target: "_blank"
+            tag: "app"
+          - name: "n8n"
+            subtitle: "Workflow automation"
+            icon: "fas fa-project-diagram"
+            url: "https://n8n.athena.notyouraverage.dev"
+            target: "_blank"
+            tag: "app"
+          - name: "Wazuh"
+            subtitle: "SIEM / endpoint security"
+            icon: "fas fa-shield-virus"
+            url: "https://wazuh.athena.notyouraverage.dev"
+            target: "_blank"
+            tag: "security"
+          - name: "Web Check"
+            subtitle: "Site analysis tool"
+            icon: "fas fa-search-location"
+            url: "https://web-check.athena.notyouraverage.dev"
+            target: "_blank"
+            tag: "tool"
+          - name: "Zabbix"
+            subtitle: "Infrastructure monitoring"
+            icon: "fas fa-heartbeat"
+            url: "https://zabbix.athena.notyouraverage.dev"
+            target: "_blank"
+            tag: "obs"
 
-          # --- Dev tools (uncomment as ingresses are added) ---
-          # - name: "Kafka UI"
-          #   subtitle: "Topic browser"
-          #   icon: "fas fa-stream"
-          #   url: "https://kafka-ui-k8s.notyouraverage.dev"
-          #   target: "_blank"
-          #   tag: "dev"
-          # - name: "Cyclops"
-          #   subtitle: "Helm UI"
-          #   icon: "fas fa-cogs"
-          #   url: "https://cyclops-k8s.notyouraverage.dev"
-          #   target: "_blank"
-          #   tag: "dev"
-
-          # --- Monitoring (uncomment as ingresses are added) ---
-          # - name: "Grafana"
-          #   subtitle: "Dashboards"
-          #   logo: "https://grafana.com/static/img/menu/grafana2.svg"
-          #   url: "https://grafana-k8s.notyouraverage.dev"
-          #   target: "_blank"
-          #   tag: "obs"
-          # - name: "Prometheus"
-          #   subtitle: "Metrics"
-          #   icon: "fas fa-fire"
-          #   url: "https://prometheus-k8s.notyouraverage.dev"
-          #   target: "_blank"
-          #   tag: "obs"
+      # ---------------------------------------------------------------------
+      # Zeus host (non-k8s) — *.zeus.notyouraverage.dev
+      - name: "Zeus Host"
+        icon: "fas fa-bolt"
+        items:
+          - name: "Immich"
+            subtitle: "Photos"
+            icon: "fas fa-images"
+            url: "https://immich.zeus.notyouraverage.dev"
+            target: "_blank"
+            tag: "media"
 
       # ---------------------------------------------------------------------
       - name: "Mac Mini"
@@ -170,11 +206,7 @@ data:
             url: "http://homer.macmini.local"
             target: "_blank"
             tag: "todo"
-          # - name: "Example service"
-          #   subtitle: "..."
-          #   icon: "fas fa-server"
-          #   url: "http://macmini.local:1234"
-          #   target: "_blank"
+          # Add real entries here when URLs are known.
 
       # ---------------------------------------------------------------------
       - name: "Unraid"
@@ -186,39 +218,28 @@ data:
             url: "http://unraid.local"
             target: "_blank"
             tag: "todo"
-          # - name: "Plex"
-          #   subtitle: "Media server"
-          #   icon: "fas fa-film"
-          #   url: "http://unraid.local:32400"
-          #   target: "_blank"
-
-      # ---------------------------------------------------------------------
-      - name: "Proxmox"
-        icon: "fas fa-server"
-        items:
-          - name: "Proxmox WebUI"
-            subtitle: "TODO: replace with real URL"
-            icon: "fas fa-microchip"
-            url: "https://proxmox.local:8006"
-            target: "_blank"
-            tag: "todo"
-          # - name: "VM: example"
-          #   subtitle: "..."
-          #   icon: "fas fa-desktop"
-          #   url: "https://vm.example.local"
-          #   target: "_blank"
 
       # ---------------------------------------------------------------------
       - name: "External"
         icon: "fas fa-globe"
         items:
+          - name: "Pangolin"
+            subtitle: "Edge auth / SSO admin"
+            icon: "fas fa-shield-alt"
+            url: "https://pangolin.notyouraverage.dev"
+            target: "_blank"
+          - name: "GitLab (self-hosted)"
+            subtitle: "Code & CI"
+            logo: "https://about.gitlab.com/images/press/logo/png/gitlab-icon-1-color-black-rgb.png"
+            url: "https://gitlab.notyouraverage.dev"
+            target: "_blank"
           - name: "Cloudflare"
             subtitle: "DNS / tunnels / WAF"
             logo: "https://www.cloudflare.com/img/logo-cloudflare.svg"
             url: "https://dash.cloudflare.com"
             target: "_blank"
           - name: "GitLab.com"
-            subtitle: "Public mirrors / CI"
+            subtitle: "Public mirrors"
             logo: "https://about.gitlab.com/images/press/logo/png/gitlab-icon-1-color-black-rgb.png"
             url: "https://gitlab.com"
             target: "_blank"
