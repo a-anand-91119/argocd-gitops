@@ -1,0 +1,229 @@
+---
+# Homer dashboard config. Single source of truth for the homelab landing page.
+#
+# To add a new entry: copy any `- name: ...` block under the relevant
+# `services[].items` and adjust. To switch between FontAwesome and a logo URL,
+# use either `icon: "fas fa-..."` OR `logo: "https://..."` (not both).
+#
+# Mounted at /www/assets/config.yml in the b4bz/homer container.
+# Updates propagate on next browser refresh (no pod restart needed) — the
+# kubelet syncs the subPath-mounted ConfigMap within ~60s.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: homer-config
+  namespace: homer
+data:
+  config.yml: |
+    title: "Notyouraverage Homelab"
+    subtitle: "Central Hub"
+    documentTitle: "Homelab"
+    logo: "https://raw.githubusercontent.com/bastienwirtz/homer/main/public/logo.png"
+    header: true
+    footer: false
+
+    columns: "auto"
+    connectivityCheck: true
+
+    defaults:
+      layout: columns
+      colorTheme: auto
+
+    theme: default
+    colors:
+      light:
+        highlight-primary: "#3367d6"
+        highlight-secondary: "#4285f4"
+        highlight-hover: "#5a95f5"
+        background: "#f5f5f5"
+        card-background: "#ffffff"
+        text: "#363636"
+        text-header: "#ffffff"
+        text-title: "#303030"
+        text-subtitle: "#424242"
+        card-shadow: rgba(0, 0, 0, 0.1)
+        link: "#3273dc"
+        link-hover: "#363636"
+      dark:
+        highlight-primary: "#3367d6"
+        highlight-secondary: "#4285f4"
+        highlight-hover: "#5a95f5"
+        background: "#131313"
+        card-background: "#2b2b2b"
+        text: "#eaeaea"
+        text-header: "#ffffff"
+        text-title: "#fafafa"
+        text-subtitle: "#f5f5f5"
+        card-shadow: rgba(0, 0, 0, 0.4)
+        link: "#3273dc"
+        link-hover: "#ffdd57"
+
+    # Each top-level entry under `services` is a tab in Homer's UI.
+    # Within each tab, `items` is a flat list (no further grouping primitive
+    # — Homer only has tab → items, so we lean on tab names for location).
+    services:
+      # ---------------------------------------------------------------------
+      - name: "Zeus K8s"
+        icon: "fas fa-dharmachakra"
+        items:
+          # --- Infra ---
+          - name: "ArgoCD"
+            subtitle: "GitOps controller"
+            logo: "https://raw.githubusercontent.com/cncf/artwork/main/projects/argo/icon/color/argo-icon-color.png"
+            url: "https://argocd-k8s.notyouraverage.dev"
+            target: "_blank"
+            tag: "infra"
+          - name: "Longhorn"
+            subtitle: "Block storage"
+            icon: "fas fa-hdd"
+            url: "https://longhorn-k8s.notyouraverage.dev"
+            target: "_blank"
+            tag: "infra"
+          - name: "Linkerd"
+            subtitle: "Service mesh"
+            logo: "https://raw.githubusercontent.com/cncf/artwork/main/projects/linkerd/icon/color/linkerd-icon-color.png"
+            url: "https://linkerd-k8s.notyouraverage.dev"
+            target: "_blank"
+            tag: "infra"
+          # - name: "Vault"
+          #   subtitle: "Secrets"
+          #   logo: "https://raw.githubusercontent.com/hashicorp/vault/main/ui/public/eng-logos/vault.svg"
+          #   url: "https://vault-k8s.notyouraverage.dev"
+          #   target: "_blank"
+          #   tag: "infra"
+
+          # --- Apps ---
+          - name: "Mixpost"
+            subtitle: "Social scheduler"
+            icon: "fas fa-share-alt"
+            url: "https://mixpost.notyouraverage.dev"
+            target: "_blank"
+            tag: "app"
+          - name: "GitLab"
+            subtitle: "Self-hosted SCM"
+            logo: "https://about.gitlab.com/images/press/logo/png/gitlab-icon-1-color-black-rgb.png"
+            url: "https://gitlab.notyouraverage.dev"
+            target: "_blank"
+            tag: "app"
+          - name: "Pangolin"
+            subtitle: "Edge auth / SSO"
+            icon: "fas fa-shield-alt"
+            url: "https://pangolin.notyouraverage.dev"
+            target: "_blank"
+            tag: "app"
+          - name: "LocalStack"
+            subtitle: "Local AWS emulator"
+            icon: "fas fa-cloud"
+            url: "https://localstack-k8s.notyouraverage.dev"
+            target: "_blank"
+            tag: "app"
+
+          # --- Storage & Data ---
+          - name: "MinIO Console"
+            subtitle: "Object storage UI (SSO-gated)"
+            logo: "https://min.io/resources/img/logo/MINIO_wordmark.png"
+            url: "https://minio.athena.notyouraverage.dev"
+            target: "_blank"
+            tag: "storage"
+          - name: "MinIO S3 API"
+            subtitle: "S3-compatible endpoint"
+            icon: "fas fa-database"
+            url: "https://s3.athena.notyouraverage.dev"
+            target: "_blank"
+            tag: "api"
+
+          # --- Dev tools (uncomment as ingresses are added) ---
+          # - name: "Kafka UI"
+          #   subtitle: "Topic browser"
+          #   icon: "fas fa-stream"
+          #   url: "https://kafka-ui-k8s.notyouraverage.dev"
+          #   target: "_blank"
+          #   tag: "dev"
+          # - name: "Cyclops"
+          #   subtitle: "Helm UI"
+          #   icon: "fas fa-cogs"
+          #   url: "https://cyclops-k8s.notyouraverage.dev"
+          #   target: "_blank"
+          #   tag: "dev"
+
+          # --- Monitoring (uncomment as ingresses are added) ---
+          # - name: "Grafana"
+          #   subtitle: "Dashboards"
+          #   logo: "https://grafana.com/static/img/menu/grafana2.svg"
+          #   url: "https://grafana-k8s.notyouraverage.dev"
+          #   target: "_blank"
+          #   tag: "obs"
+          # - name: "Prometheus"
+          #   subtitle: "Metrics"
+          #   icon: "fas fa-fire"
+          #   url: "https://prometheus-k8s.notyouraverage.dev"
+          #   target: "_blank"
+          #   tag: "obs"
+
+      # ---------------------------------------------------------------------
+      - name: "Mac Mini"
+        icon: "fab fa-apple"
+        items:
+          - name: "Mac Mini Homer (local)"
+            subtitle: "TODO: replace with real URL"
+            icon: "fas fa-house-user"
+            url: "http://homer.macmini.local"
+            target: "_blank"
+            tag: "todo"
+          # - name: "Example service"
+          #   subtitle: "..."
+          #   icon: "fas fa-server"
+          #   url: "http://macmini.local:1234"
+          #   target: "_blank"
+
+      # ---------------------------------------------------------------------
+      - name: "Unraid"
+        icon: "fas fa-hdd"
+        items:
+          - name: "Unraid WebUI"
+            subtitle: "TODO: replace with real URL"
+            icon: "fas fa-cog"
+            url: "http://unraid.local"
+            target: "_blank"
+            tag: "todo"
+          # - name: "Plex"
+          #   subtitle: "Media server"
+          #   icon: "fas fa-film"
+          #   url: "http://unraid.local:32400"
+          #   target: "_blank"
+
+      # ---------------------------------------------------------------------
+      - name: "Proxmox"
+        icon: "fas fa-server"
+        items:
+          - name: "Proxmox WebUI"
+            subtitle: "TODO: replace with real URL"
+            icon: "fas fa-microchip"
+            url: "https://proxmox.local:8006"
+            target: "_blank"
+            tag: "todo"
+          # - name: "VM: example"
+          #   subtitle: "..."
+          #   icon: "fas fa-desktop"
+          #   url: "https://vm.example.local"
+          #   target: "_blank"
+
+      # ---------------------------------------------------------------------
+      - name: "External"
+        icon: "fas fa-globe"
+        items:
+          - name: "Cloudflare"
+            subtitle: "DNS / tunnels / WAF"
+            logo: "https://www.cloudflare.com/img/logo-cloudflare.svg"
+            url: "https://dash.cloudflare.com"
+            target: "_blank"
+          - name: "GitLab.com"
+            subtitle: "Public mirrors / CI"
+            logo: "https://about.gitlab.com/images/press/logo/png/gitlab-icon-1-color-black-rgb.png"
+            url: "https://gitlab.com"
+            target: "_blank"
+          - name: "Anthropic Console"
+            subtitle: "Claude API"
+            icon: "fas fa-robot"
+            url: "https://console.anthropic.com"
+            target: "_blank"
