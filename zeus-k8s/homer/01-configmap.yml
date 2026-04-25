@@ -155,12 +155,6 @@ data:
             icon: "fas fa-cube"
             url: "https://s3.athena.notyouraverage.dev"
             target: "_blank"
-          - name: "StackGres"
-            subtitle: "Postgres operator UI"
-            tag: "k8s"
-            icon: "fas fa-elephant"
-            url: "https://stackgres.k8s.notyouraverage.dev"
-            target: "_blank"
 
       # -----------------------------------------------------------------
       - name: "Apps"
