@@ -1,0 +1,40 @@
+---
+# stakater/reloader: watches ConfigMaps & Secrets cluster-wide and triggers
+# rolling restarts on workloads annotated `reloader.stakater.com/auto: "true"`.
+#
+# Wave -10 (infra band) — install before regular app deployments so any
+# ConfigMap-driven app coming up at wave 30 already has its watcher in place.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: reloader
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
+    app.kubernetes.io/managed-by: argocd-gitops-repo
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: zeus-kubernetes
+  source:
+    repoURL: ssh://git@gitlab.notyouraverage.dev:8443/a.anand.91119/argocd-gitops.git
+    targetRevision: HEAD
+    path: zeus-k8s/reloader
+    helm:
+      valueFiles:
+        - values.yml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: reloader
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m

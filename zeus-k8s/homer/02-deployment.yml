@@ -6,6 +6,11 @@ metadata:
   namespace: homer
   labels:
     app.kubernetes.io/name: homer
+  annotations:
+    # Stakater Reloader watches the homer-config ConfigMap and rolls this
+    # deployment when its content changes. Required because the ConfigMap
+    # is mounted via subPath, which kubelet does NOT auto-refresh.
+    reloader.stakater.com/auto: "true"
 spec:
   replicas: 3
   strategy:
@@ -20,8 +25,6 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: homer
-      annotations:
-        config.checksum/configmap: homer-config
     spec:
       # Spread replicas across nodes so a single node loss doesn't take the
       # dashboard down. ScheduleAnyway (not DoNotSchedule) keeps the deploy

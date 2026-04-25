@@ -1,0 +1,19 @@
+reloader:
+  fullnameOverride: reloader
+  reloader:
+    # Watch ConfigMaps/Secrets across all namespaces. Workloads opt in via
+    # the `reloader.stakater.com/auto: "true"` annotation on the Deployment
+    # (or per-resource `reloader.stakater.com/match` annotations).
+    watchGlobally: true
+    # Roll the workload (rolling restart) when watched ConfigMaps/Secrets
+    # change. Alternative: env-vars (injects last-reloaded timestamp env)
+    # or annotations (bumps a pod-template annotation).
+    reloadStrategy: default
+    deployment:
+      replicas: 1
+      resources:
+        requests:
+          cpu: 10m
+          memory: 64Mi
+        limits:
+          memory: 128Mi
