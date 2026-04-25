@@ -55,8 +55,8 @@ spec:
               subPath: config.yml
               readOnly: true
             - name: config
-              mountPath: /www/assets/chooser.html
-              subPath: chooser.html
+              mountPath: /www/assets/tailscale.yml
+              subPath: tailscale.yml
               readOnly: true
           readinessProbe:
             httpGet:
@@ -90,5 +90,5 @@ spec:
             items:
               - key: config.yml
                 path: config.yml
-              - key: chooser.html
-                path: chooser.html
+              - key: tailscale.yml
+                path: tailscale.yml
