@@ -7,9 +7,12 @@ metadata:
   labels:
     app.kubernetes.io/name: homer
 spec:
-  replicas: 1
+  replicas: 3
   strategy:
     type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: homer
@@ -18,11 +21,18 @@ spec:
       labels:
         app.kubernetes.io/name: homer
       annotations:
-        # Restart pods automatically when the ConfigMap changes. Homer also
-        # reloads on browser refresh via subPath kubelet sync, but a hash
-        # annotation triggers an immediate rollout for visibility in Argo.
         config.checksum/configmap: homer-config
     spec:
+      # Spread replicas across nodes so a single node loss doesn't take the
+      # dashboard down. ScheduleAnyway (not DoNotSchedule) keeps the deploy
+      # functional on a single-node cluster — pods just co-locate.
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: homer
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000

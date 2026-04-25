@@ -1,0 +1,14 @@
+---
+# Keep the dashboard reachable through node drains / cluster maintenance.
+# With replicas: 3 and minAvailable: 2, voluntary disruption can take down
+# at most one pod at a time.
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: homer
+  namespace: homer
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: homer
