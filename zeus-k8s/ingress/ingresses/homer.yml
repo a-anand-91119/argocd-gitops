@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: cloudflare-tunnel
   rules:
-    - host: homer-k8s.notyouraverage.dev
+    - host: homer.k8s.notyouraverage.dev
       http:
         paths:
           - path: /
