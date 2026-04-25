@@ -267,16 +267,15 @@ data:
             target: "_blank"
 
       # -----------------------------------------------------------------
-      # Unraid placeholder — replace when URLs are known.
-      # - name: "Unraid"
-      #   icon: "fas fa-hdd"
-      #   items:
-      #     - name: "Unraid WebUI"
-      #       subtitle: "TODO"
-      #       tag: "unraid"
-      #       icon: "fas fa-cog"
-      #       url: "http://unraid.local"
-      #       target: "_blank"
+      - name: "NAS"
+        icon: "fas fa-hdd"
+        items:
+          - name: "Unraid"
+            subtitle: "unraid.notyouraverage.dev — public via Cloudflare Tunnel"
+            tag: "unraid"
+            icon: "fas fa-server"
+            url: "https://unraid.notyouraverage.dev/"
+            target: "_blank"
 
   # Tailscale-flavored variant of the dashboard. Loaded by Homer's hash
   # router when the user clicks the "Tailscale view" header link
@@ -496,4 +495,28 @@ data:
             tag: "lan"
             logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/immich.png"
             url: "http://TODO_ZEUS_LAN_IP:2283"
+            target: "_blank"
+
+      # ---------------------------------------------------------------
+      # Network appliances and NAS — confirmed LAN endpoints.
+      - name: "Network & NAS (LAN)"
+        icon: "fas fa-network-wired"
+        items:
+          - name: "Pi-hole"
+            subtitle: "192.168.1.100/admin"
+            tag: "lan"
+            logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/pihole.png"
+            url: "http://192.168.1.100/admin/"
+            target: "_blank"
+          - name: "Nano KVM"
+            subtitle: "192.168.1.110"
+            tag: "lan"
+            icon: "fas fa-keyboard"
+            url: "http://192.168.1.110/#/"
+            target: "_blank"
+          - name: "Unraid"
+            subtitle: "192.168.0.127"
+            tag: "lan"
+            icon: "fas fa-server"
+            url: "http://192.168.0.127/"
             target: "_blank"
