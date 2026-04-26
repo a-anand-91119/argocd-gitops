@@ -93,6 +93,12 @@ spec:
               mountPath: /app/config/custom.js
               subPath: custom.js
               readOnly: true
+            # Homepage writes runtime logs under /app/config/logs.
+            # The parent /app/config is owned by the image's user and
+            # not writable by UID 1000, so give logs/ its own emptyDir
+            # (fsGroup: 1000 on the pod makes it group-writable).
+            - name: logs
+              mountPath: /app/config/logs
           readinessProbe:
             httpGet:
               path: /api/healthcheck
@@ -131,3 +137,6 @@ spec:
               - { key: kubernetes.yaml, path: kubernetes.yaml }
               - { key: custom.css,      path: custom.css }
               - { key: custom.js,       path: custom.js }
+        - name: logs
+          emptyDir:
+            sizeLimit: 16Mi
