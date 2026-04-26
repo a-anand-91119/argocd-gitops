@@ -26,10 +26,11 @@
 # project has a logo for the service; FontAwesome icon as fallback for
 # custom apps.
 #
-# Smart cards: Pi-hole, Proxmox, Uptime Kuma, and Immich are wired up
-# as Homer smart cards and will fetch live stats once their API keys /
-# tokens are filled in (search for TODO_*_API_KEY / TODO_*_TOKEN).
-# Without credentials they render as plain link tiles — no breakage.
+# Smart cards: only Uptime Kuma uses one (its `slug` is not a secret).
+# API-keyed smart cards (Pi-hole, Proxmox, Immich) were dropped because
+# wiring secrets through an envsubst init container kept hitting
+# permission walls under runAsNonRoot. Tiles for those services are
+# plain links — click through to the service for live data.
 #
 # Reloader watches this ConfigMap → rolls the deployment on edit.
 apiVersion: v1
@@ -205,24 +206,13 @@ data:
       - name: "🖥 Athena (Proxmox)"
         icon: "fas fa-server"
         items:
-          # Smart card: Proxmox. Fill in `node` (your PVE node name)
-          # and `api_token` to show running VM/LXC counts and resource
-          # usage. Create token: Datacenter > Permissions > API Tokens
-          # (PVEAuditor role is enough). Public URL won't expose the
-          # API; consider using LAN view for live data.
           - name: "Proxmox"
             subtitle: "proxmox.athena.notyouraverage.dev"
-            type: "Proxmox"
             tag: "public"
             tagstyle: "is-success"
             keywords: "hypervisor vm"
             logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/proxmox.png"
             url: "https://proxmox.athena.notyouraverage.dev"
-            node: "${PROXMOX_NODE_NAME}"
-            api_token: "${PROXMOX_API_TOKEN}"
-            warning_value: 50
-            danger_value: 80
-            hide_decimals: true
             target: "_blank"
           - name: "MinIO Console"
             subtitle: "minio.athena.notyouraverage.dev"
@@ -352,13 +342,11 @@ data:
         items:
           - name: "Immich"
             subtitle: "immich.zeus.notyouraverage.dev"
-            type: "Immich"
             tag: "public"
             tagstyle: "is-success"
             keywords: "photos unraid"
             logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/immich.png"
             url: "https://immich.zeus.notyouraverage.dev"
-            apikey: "${IMMICH_API_KEY}"
             target: "_blank"
           - name: "Plex"
             subtitle: "192.168.0.127:32400/web (no public URL)"
@@ -784,12 +772,10 @@ data:
         items:
           - name: "Immich"
             subtitle: "immich.zeus.notyouraverage.dev (public)"
-            type: "Immich"
             tag: "public"
             tagstyle: "is-success"
             logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/immich.png"
             url: "https://immich.zeus.notyouraverage.dev"
-            apikey: "${IMMICH_API_KEY}"
             target: "_blank"
           - name: "Plex"
             subtitle: "192.168.0.127:32400/web (LAN only)"
@@ -1085,21 +1071,12 @@ data:
       - name: "🖥 Athena (Proxmox)"
         icon: "fas fa-server"
         items:
-          # Smart card: Proxmox over LAN. Fill in `node` and `api_token`
-          # for live VM/LXC/CPU/MEM stats. Generate token under:
-          # Datacenter > Permissions > API Tokens.
           - name: "Proxmox"
             subtitle: "192.168.0.254:8006"
-            type: "Proxmox"
             tag: "lan"
             tagstyle: "is-warning"
             logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/proxmox.png"
             url: "https://192.168.0.254:8006"
-            node: "${PROXMOX_NODE_NAME}"
-            api_token: "${PROXMOX_API_TOKEN}"
-            warning_value: 50
-            danger_value: 80
-            hide_decimals: true
             target: "_blank"
           - name: "MinIO Console"
             subtitle: "192.168.0.169:9001"
@@ -1215,13 +1192,11 @@ data:
             target: "_blank"
           - name: "Immich"
             subtitle: "192.168.0.127:7071 — photos"
-            type: "Immich"
             tag: "lan"
             tagstyle: "is-warning"
             keywords: "photos"
             logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/immich.png"
             url: "http://192.168.0.127:7071"
-            apikey: "${IMMICH_API_KEY}"
             target: "_blank"
           # --- Torrents / *arr stack ---------------------------------
           - name: "rTorrent (linuxserver)"
@@ -1375,18 +1350,12 @@ data:
       - name: "🌐 Network & NAS"
         icon: "fas fa-network-wired"
         items:
-          # Smart card: Pi-hole. Fill in `apikey` (Settings > API > Show
-          # API token) to render live ad-blocking stats. Set
-          # apiVersion: 6 if you're on Pi-hole v6+.
           - name: "Pi-hole"
             subtitle: "192.168.1.100/admin"
-            type: "PiHole"
             tag: "lan"
             tagstyle: "is-warning"
             logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/pihole.png"
-            url: "http://192.168.1.100/admin"
-            apikey: "${PIHOLE_API_KEY}"
-            apiVersion: 5
+            url: "http://192.168.1.100/admin/"
             target: "_blank"
           - name: "Nano KVM"
             subtitle: "192.168.1.110"
