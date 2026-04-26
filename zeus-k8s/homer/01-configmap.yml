@@ -210,7 +210,7 @@ data:
             keywords: "photos"
             logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/immich.png"
             url: "https://immich.zeus.notyouraverage.dev"
-            apikey: "TODO_IMMICH_API_KEY"
+            apikey: "${IMMICH_API_KEY}"
             target: "_blank"
 
       # -----------------------------------------------------------------
@@ -230,8 +230,8 @@ data:
             keywords: "hypervisor vm"
             logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/proxmox.png"
             url: "https://proxmox.athena.notyouraverage.dev"
-            node: "TODO_PROXMOX_NODE_NAME"
-            api_token: "TODO_PROXMOX_API_TOKEN"
+            node: "${PROXMOX_NODE_NAME}"
+            api_token: "${PROXMOX_API_TOKEN}"
             warning_value: 50
             danger_value: 80
             hide_decimals: true
@@ -516,7 +516,7 @@ data:
             tagstyle: "is-success"
             logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/immich.png"
             url: "https://immich.zeus.notyouraverage.dev"
-            apikey: "TODO_IMMICH_API_KEY"
+            apikey: "${IMMICH_API_KEY}"
             target: "_blank"
 
       - name: "🖥 Athena (Proxmox)"
@@ -796,7 +796,7 @@ data:
             tagstyle: "is-success"
             logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/immich.png"
             url: "https://immich.zeus.notyouraverage.dev"
-            apikey: "TODO_IMMICH_API_KEY"
+            apikey: "${IMMICH_API_KEY}"
             target: "_blank"
 
       - name: "🖥 Athena (Proxmox)"
@@ -812,8 +812,8 @@ data:
             tagstyle: "is-warning"
             logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/proxmox.png"
             url: "https://192.168.0.254:8006"
-            node: "TODO_PROXMOX_NODE_NAME"
-            api_token: "TODO_PROXMOX_API_TOKEN"
+            node: "${PROXMOX_NODE_NAME}"
+            api_token: "${PROXMOX_API_TOKEN}"
             warning_value: 50
             danger_value: 80
             hide_decimals: true
@@ -918,7 +918,7 @@ data:
             tagstyle: "is-warning"
             logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/pihole.png"
             url: "http://192.168.1.100/admin"
-            apikey: "TODO_PIHOLE_API_KEY"
+            apikey: "${PIHOLE_API_KEY}"
             apiVersion: 5
             target: "_blank"
           - name: "Nano KVM"

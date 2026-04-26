@@ -7,9 +7,11 @@ metadata:
   labels:
     app.kubernetes.io/name: homer
   annotations:
-    # Stakater Reloader watches the homer-config ConfigMap and rolls this
-    # deployment when its content changes. Required because the ConfigMap
-    # is mounted via subPath, which kubelet does NOT auto-refresh.
+    # Stakater Reloader watches the homer-config ConfigMap *and* the
+    # homer-smartcard-creds Secret, rolling this deployment when either
+    # changes. Required because the ConfigMap is mounted via subPath,
+    # which kubelet does NOT auto-refresh; the Secret is consumed by
+    # the init container so its values are baked in at pod start.
     reloader.stakater.com/auto: "true"
 spec:
   replicas: 3
@@ -26,9 +28,6 @@ spec:
       labels:
         app.kubernetes.io/name: homer
     spec:
-      # Spread replicas across nodes so a single node loss doesn't take the
-      # dashboard down. ScheduleAnyway (not DoNotSchedule) keeps the deploy
-      # functional on a single-node cluster — pods just co-locate.
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
@@ -41,6 +40,37 @@ spec:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
+      # Init container: render ${VAR} placeholders in the ConfigMap
+      # YAML files using values from the homer-smartcard-creds Secret.
+      # alpine + gettext gives us envsubst in ~8 MB. Output goes to a
+      # shared emptyDir that the homer container mounts read-only.
+      initContainers:
+        - name: render-config
+          image: alpine:3.20
+          imagePullPolicy: IfNotPresent
+          command: ["sh", "-c"]
+          args:
+            - |
+              set -eu
+              apk add --no-cache gettext >/dev/null
+              for f in config.yml tailscale.yml lan.yml; do
+                envsubst < /tpl/$f > /rendered/$f
+              done
+              echo "Rendered $(ls /rendered | tr '\n' ' ')"
+          envFrom:
+            - secretRef:
+                name: homer-smartcard-creds
+          volumeMounts:
+            - name: config-tpl
+              mountPath: /tpl
+              readOnly: true
+            - name: config-rendered
+              mountPath: /rendered
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
       containers:
         - name: homer
           image: b4bz/homer:latest
@@ -50,15 +80,15 @@ spec:
               containerPort: 8080
               protocol: TCP
           volumeMounts:
-            - name: config
+            - name: config-rendered
               mountPath: /www/assets/config.yml
               subPath: config.yml
               readOnly: true
-            - name: config
+            - name: config-rendered
               mountPath: /www/assets/tailscale.yml
               subPath: tailscale.yml
               readOnly: true
-            - name: config
+            - name: config-rendered
               mountPath: /www/assets/lan.yml
               subPath: lan.yml
               readOnly: true
@@ -88,7 +118,7 @@ spec:
               drop:
                 - ALL
       volumes:
-        - name: config
+        - name: config-tpl
           configMap:
             name: homer-config
             items:
@@ -98,3 +128,7 @@ spec:
                 path: tailscale.yml
               - key: lan.yml
                 path: lan.yml
+        - name: config-rendered
+          emptyDir:
+            medium: Memory
+            sizeLimit: 1Mi
