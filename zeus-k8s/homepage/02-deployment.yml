@@ -54,10 +54,12 @@ spec:
                 name: homepage-secrets
                 optional: true
           env:
-            # Required by Homepage v0.10+ when behind a reverse proxy.
-            # Comma-separated list of allowed Host headers.
+            # Pangolin/Newt forwards the upstream pod IP as Host
+            # (e.g. "10.244.21.190:3000"), so a static list never
+            # matches. Allow all hosts — the actual security boundary
+            # is Pangolin SSO in front, not Homepage's Host header.
             - name: HOMEPAGE_ALLOWED_HOSTS
-              value: "homepage.k8s.notyouraverage.dev,homepage.homepage.svc.cluster.local"
+              value: "*"
           volumeMounts:
             - name: config
               mountPath: /app/config/settings.yaml

@@ -42,10 +42,11 @@ data:
       searchDescriptions: true
       hideInternetSearch: false
       hideVisitURL: false
-    # Homepage v0.10+ requires explicit allowed hosts when behind a
-    # reverse proxy. Cover the public Cloudflare-tunnel hostname plus
-    # the in-cluster service DNS for health checks.
-    allowedHosts: homepage.k8s.notyouraverage.dev,homepage.homepage.svc.cluster.local
+    # Pangolin/Newt forwards the upstream pod IP as Host header, so a
+    # static allowlist can't match. Allow all — Pangolin SSO in front
+    # is the actual access gate. The HOMEPAGE_ALLOWED_HOSTS env var
+    # in the deployment takes precedence over this anyway.
+    allowedHosts: "*"
 
   # ---------------------------------------------------------------------------
   widgets.yaml: |
