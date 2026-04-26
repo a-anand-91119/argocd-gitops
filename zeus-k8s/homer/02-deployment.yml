@@ -66,7 +66,13 @@ spec:
               readOnly: true
             - name: config-rendered
               mountPath: /rendered
+          # Override pod-level runAsNonRoot so apk can write to
+          # /etc/apk/db. The init container only writes into the
+          # ephemeral tmpfs emptyDir; the long-running homer
+          # container still runs as the unprivileged 1000 user.
           securityContext:
+            runAsNonRoot: false
+            runAsUser: 0
             allowPrivilegeEscalation: false
             capabilities:
               drop:
