@@ -1,0 +1,66 @@
+---
+# Opik (comet-ml/opik): self-hosted LLM evaluation / tracing / prompt
+# optimization platform. Helm chart from upstream OCI-flavored repo
+# https://comet-ml.github.io/opik/. The chart bundles MySQL, ClickHouse
+# (via altinity-clickhouse-operator), Redis, MinIO, and Zookeeper as
+# subchart dependencies, so this single Application brings up the
+# whole stack — heavy footprint, plan for several PVCs.
+#
+# Frontend exposed at opik.k8s.notyouraverage.dev via the existing
+# cloudflare-tunnel ingress class. Add a Pangolin resource pointing at
+# opik.opik.svc.cluster.local:5173 once the chart is up.
+#
+# Wave 30 (application band). Namespace from the namespaces aggregator.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: opik
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "30"
+    app.kubernetes.io/managed-by: argocd-gitops-repo
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: zeus-kubernetes
+  source:
+    repoURL: https://comet-ml.github.io/opik/
+    chart: opik
+    targetRevision: 2.0.14
+    helm:
+      releaseName: opik
+      valuesObject:
+        component:
+          frontend:
+            ingress:
+              enabled: true
+              ingressClassName: cloudflare-tunnel
+              hosts:
+                - host: opik.k8s.notyouraverage.dev
+                  paths:
+                    - path: /
+                      port: 5173
+                      pathType: Prefix
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: opik
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      # ClickHouse operator (altinity) ships large CRDs that exceed the
+      # 256 KiB last-applied annotation limit — server-side apply
+      # avoids the failure.
+      - ServerSideApply=true
+      # The chart owns its own namespace lifecycle internals via
+      # subcharts; let prune treat the foreground propagation gracefully.
+      - PrunePropagationPolicy=foreground
+      # Helm hooks (e.g. clickhouse setup jobs) need to run in order.
+      - CreateNamespace=false
+    retry:
+      limit: 5
+      backoff:
+        duration: 30s
+        factor: 2
+        maxDuration: 5m
