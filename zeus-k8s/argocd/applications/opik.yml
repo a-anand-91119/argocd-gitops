@@ -30,10 +30,31 @@ spec:
     helm:
       releaseName: opik
       valuesObject:
+        # Reuse existing in-cluster / on-Athena infrastructure where
+        # safe. Bundled MySQL stays (Opik runs schema migrations on
+        # its own DB; sharing MariaDB is risky). ClickHouse +
+        # Zookeeper stay (no equivalents exist).
+        redis:
+          enabled: false
+        minio:
+          enabled: false
         component:
           frontend:
             ingress:
               enabled: false
+          backend:
+            # Default envFrom is just the chart's ConfigMap; append
+            # our external-creds Secret so its values (REDIS_URL,
+            # AWS_*, S3_*) override the empty defaults the chart
+            # writes when redis/minio are disabled.
+            envFrom:
+              - configMapRef:
+                  name: opik-backend
+              - secretRef:
+                  name: opik-external-creds
+          python-backend:
+            secretRefs:
+              - name: opik-external-creds
   destination:
     server: https://kubernetes.default.svc
     namespace: opik
