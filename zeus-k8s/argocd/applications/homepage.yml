@@ -1,0 +1,38 @@
+---
+# homepage (gethomepage.dev): modern dashboard with native widget
+# integrations (Pi-hole, Proxmox, Immich, Uptime Kuma, etc.) and
+# {{HOMEPAGE_VAR_*}} env-var substitution baked in. Running in
+# parallel with Homer at homepage.k8s.notyouraverage.dev for
+# evaluation against homer.k8s.notyouraverage.dev.
+#
+# Wave 30 (application band). Namespace from namespaces aggregator
+# (wave -25); ingress from ingresses aggregator.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: homepage
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "30"
+    app.kubernetes.io/managed-by: argocd-gitops-repo
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: zeus-kubernetes
+  source:
+    repoURL: ssh://git@gitlab.notyouraverage.dev:8443/a.anand.91119/argocd-gitops.git
+    targetRevision: HEAD
+    path: zeus-k8s/homepage
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: homepage
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m

@@ -1,0 +1,14 @@
+---
+# Keep the dashboard reachable through node drains. With replicas: 2
+# and minAvailable: 1, voluntary disruption can take down at most one
+# pod at a time.
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: homepage
+  namespace: homepage
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: homepage

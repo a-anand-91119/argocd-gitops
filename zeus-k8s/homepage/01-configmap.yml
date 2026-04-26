@@ -1,0 +1,298 @@
+---
+# Homepage (gethomepage.dev) configuration.
+#
+# Files (mounted at /app/config/):
+#   settings.yaml   — top-level look/feel + allowed hosts
+#   services.yaml   — service tiles, grouped
+#   widgets.yaml    — header widgets (search, datetime, system stats)
+#   bookmarks.yaml  — header bookmark links
+#   docker.yaml     — Docker host integrations (empty for now)
+#   kubernetes.yaml — k8s cluster integrations (empty for now)
+#
+# Secret values are referenced as {{HOMEPAGE_VAR_<NAME>}} and resolved
+# at startup from env vars sourced from the homepage-secrets Secret
+# (sealed copy in zeus-k8s/secrets/). No init container needed —
+# Homepage handles substitution natively.
+#
+# Reloader watches this ConfigMap → rolls the deployment on edit.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: homepage-config
+  namespace: homepage
+data:
+
+  # ---------------------------------------------------------------------------
+  settings.yaml: |
+    title: "Notyouraverage"
+    headerStyle: clean
+    language: en
+    theme: dark
+    color: slate
+    target: _blank
+    layout:
+      Favourites:           { style: column, columns: 5 }
+      Zeus K8s:             { style: column, columns: 4 }
+      Athena (Proxmox):     { style: column, columns: 4 }
+      Mac Mini / Iris:      { style: column, columns: 4 }
+      Zeus / Unraid Docker: { style: column, columns: 4 }
+      Network & NAS:        { style: column, columns: 4 }
+      SaaS / External:      { style: column, columns: 4 }
+    quicklaunch:
+      searchDescriptions: true
+      hideInternetSearch: false
+      hideVisitURL: false
+    # Homepage v0.10+ requires explicit allowed hosts when behind a
+    # reverse proxy. Cover the public Cloudflare-tunnel hostname plus
+    # the in-cluster service DNS for health checks.
+    allowedHosts: homepage.k8s.notyouraverage.dev,homepage.homepage.svc.cluster.local
+
+  # ---------------------------------------------------------------------------
+  widgets.yaml: |
+    - resources:
+        cpu: true
+        memory: true
+        label: pod
+    - search:
+        provider: duckduckgo
+        target: _blank
+    - datetime:
+        text_size: xl
+        format:
+          timeStyle: short
+          dateStyle: long
+
+  # ---------------------------------------------------------------------------
+  bookmarks.yaml: |
+    - Quick:
+        - Pangolin:
+            - abbr: PG
+              href: https://pangolin.notyouraverage.dev
+        - Repo:
+            - abbr: GL
+              href: https://gitlab.notyouraverage.dev/a.anand.91119/argocd-gitops
+        - Homer:
+            - abbr: HO
+              href: https://homer.k8s.notyouraverage.dev
+
+  # ---------------------------------------------------------------------------
+  # Service tiles. Groups mirror Homer's structure for direct
+  # comparison. Widget configs use {{HOMEPAGE_VAR_*}} placeholders;
+  # Homepage substitutes them at startup from envFrom secret.
+  services.yaml: |
+    - Favourites:
+        - ArgoCD:
+            href: https://argocd.k8s.notyouraverage.dev
+            description: GitOps controller
+            icon: argo-cd.png
+        - Grafana:
+            href: https://grafana.k8s.notyouraverage.dev
+            description: Dashboards & alerts
+            icon: grafana.png
+        - GitLab:
+            href: https://gitlab.notyouraverage.dev
+            description: SCM + CI
+            icon: gitlab.png
+        - Iris Dashboard:
+            href: https://homer.iris.notyouraverage.dev/
+            description: Iris control center (external Homer)
+            icon: si-mattermost
+        - Pangolin:
+            href: https://pangolin.notyouraverage.dev
+            description: Edge auth / SSO
+            icon: si-cloudflare
+
+    - Zeus K8s:
+        - Linkerd:
+            href: https://linkerd.k8s.notyouraverage.dev
+            description: Service mesh
+            icon: linkerd.png
+        - Vault:
+            href: https://vault.k8s.notyouraverage.dev
+            description: Secrets
+            icon: vault.png
+        - Longhorn:
+            href: https://longhorn.k8s.notyouraverage.dev
+            description: Block storage
+            icon: longhorn.png
+        - Mixpost:
+            href: https://mixpost.k8s.notyouraverage.dev
+            description: Social scheduler
+            icon: mixpost.png
+        - LocalStack:
+            href: https://localstack-k8s.notyouraverage.dev
+            description: AWS emulator
+            icon: si-amazonaws
+
+    - Athena (Proxmox):
+        - Proxmox:
+            href: https://proxmox.athena.notyouraverage.dev
+            description: Hypervisor
+            icon: proxmox.png
+            widget:
+              type: proxmox
+              url: https://192.168.0.254:8006
+              username: "{{HOMEPAGE_VAR_PROXMOX_USER}}"
+              password: "{{HOMEPAGE_VAR_PROXMOX_TOKEN_SECRET}}"
+              node: "{{HOMEPAGE_VAR_PROXMOX_NODE}}"
+        - MinIO Console:
+            href: https://minio.athena.notyouraverage.dev
+            description: Object store UI
+            icon: minio.png
+        - MinIO S3:
+            href: https://s3.athena.notyouraverage.dev
+            description: S3 API
+            icon: minio.png
+        - n8n:
+            href: https://n8n.athena.notyouraverage.dev
+            description: Workflow automation
+            icon: n8n.png
+        - Excalidraw:
+            href: https://excalidraw.athena.notyouraverage.dev
+            description: Whiteboarding
+            icon: excalidraw.png
+        - Wazuh:
+            href: https://wazuh.athena.notyouraverage.dev
+            description: SIEM / endpoint security
+            icon: wazuh.png
+        - Web Check:
+            href: https://web-check.athena.notyouraverage.dev
+            description: Site analyzer
+            icon: web-check.png
+        - Zabbix:
+            href: https://zabbix.athena.notyouraverage.dev
+            description: Infrastructure monitoring
+            icon: zabbix.png
+
+    - Mac Mini / Iris:
+        - Apollo KB:
+            href: https://apollo.iris.notyouraverage.dev
+            description: Knowledge base
+            icon: si-readthedocs
+        - Finance:
+            href: https://finance.iris.notyouraverage.dev
+            description: Bills & expenses
+            icon: si-walletconnect
+        - Ledger:
+            href: https://ledger.iris.notyouraverage.dev
+            description: Personal finance
+            icon: si-ledger
+        - Brain DB:
+            href: https://brain.iris.notyouraverage.dev
+            description: CRUD, graph, vitality
+            icon: si-databricks
+        - Daimon:
+            href: https://daimon.iris.notyouraverage.dev
+            description: Pressures & satisfaction
+            icon: si-fireship
+        - Emotion:
+            href: https://emotion.iris.notyouraverage.dev
+            description: VAD, mood & bonds
+            icon: si-heart
+        - ReClip:
+            href: https://reclip.iris.notyouraverage.dev
+            description: Video / audio downloader
+            icon: si-youtube
+
+    - Zeus / Unraid Docker:
+        - Immich:
+            href: https://immich.zeus.notyouraverage.dev
+            description: Photos
+            icon: immich.png
+            widget:
+              type: immich
+              url: https://immich.zeus.notyouraverage.dev
+              key: "{{HOMEPAGE_VAR_IMMICH_KEY}}"
+        - Plex:
+            href: http://192.168.0.127:32400/web
+            description: Media server (LAN only)
+            icon: plex.png
+        - Tautulli:
+            href: http://192.168.0.127:8181
+            description: Plex stats (LAN only)
+            icon: tautulli.png
+        - Jenkins:
+            href: http://192.168.0.127:8081
+            description: CI (LAN only)
+            icon: jenkins.png
+        - rTorrent:
+            href: http://192.168.0.127:9010
+            description: Torrent client (LAN only)
+            icon: rutorrent.png
+        - Jackett:
+            href: http://192.168.0.127:9117
+            description: Indexer aggregator (LAN only)
+            icon: jackett.png
+        - code-server:
+            href: https://192.168.0.127:9007
+            description: VS Code in browser (LAN only)
+            icon: code-server.png
+        - IT-Tools:
+            href: http://192.168.0.127:8082
+            description: Dev utilities (LAN only)
+            icon: it-tools.png
+        - CloudBeaver:
+            href: http://192.168.0.127:8978
+            description: SQL UI (LAN only)
+            icon: si-databricks
+        - RedisInsight:
+            href: http://192.168.0.127:8001
+            description: Redis UI (LAN only)
+            icon: redis.png
+        - Wallos:
+            href: http://192.168.0.127:8282
+            description: Subscription tracker (LAN only)
+            icon: si-moneygram
+        - Wallabag:
+            href: http://192.168.0.127:6500
+            description: Read-it-later (LAN only)
+            icon: wallabag.png
+        - BackupPC:
+            href: http://192.168.0.127:8000
+            description: Backups (LAN only)
+            icon: si-backblaze
+
+    - Network & NAS:
+        - Pi-hole:
+            href: http://192.168.1.100/admin/
+            description: DNS sinkhole (LAN only)
+            icon: pi-hole.png
+            widget:
+              type: pihole
+              url: http://192.168.1.100
+              key: "{{HOMEPAGE_VAR_PIHOLE_KEY}}"
+              version: 5
+        - Nano KVM:
+            href: http://192.168.1.110/#/
+            description: Remote KVM (LAN only)
+            icon: si-tailscale
+        - Unraid:
+            href: https://unraid.notyouraverage.dev/
+            description: NAS host
+            icon: unraid.png
+        - Uptime Kuma:
+            href: http://192.168.2.52:3001
+            description: Service uptime (LAN only)
+            icon: uptime-kuma.png
+            widget:
+              type: uptimekuma
+              url: http://192.168.2.52:3001
+              slug: default
+
+    - SaaS / External:
+        - Cloudflare:
+            href: https://dash.cloudflare.com
+            description: DNS / tunnels / WAF
+            icon: cloudflare.png
+        - Anthropic Console:
+            href: https://console.anthropic.com
+            description: Claude API
+            icon: si-anthropic
+
+  # ---------------------------------------------------------------------------
+  # Empty placeholders — Homepage requires the files to exist even if
+  # unused. Wire up once you want auto-discovery from Docker / k8s.
+  docker.yaml: ""
+  kubernetes.yaml: ""
+  custom.css: ""
+  custom.js: ""
