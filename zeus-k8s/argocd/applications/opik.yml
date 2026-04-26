@@ -53,8 +53,16 @@ spec:
               - secretRef:
                   name: opik-external-creds
           python-backend:
-            secretRefs:
-              - name: opik-external-creds
+            # Avoid the chart's `secretRefs` field — it renders the
+            # appended `- secretRef:` block at the wrong indentation
+            # when combined with the default envFrom (chart 2.0.14
+            # bug). Override envFrom directly instead, mirroring the
+            # backend pattern.
+            envFrom:
+              - configMapRef:
+                  name: opik-python-backend
+              - secretRef:
+                  name: opik-external-creds
   destination:
     server: https://kubernetes.default.svc
     namespace: opik
