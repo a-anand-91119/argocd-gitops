@@ -293,7 +293,11 @@ data:
   # ---------------------------------------------------------------------------
   # Empty placeholders — Homepage requires the files to exist even if
   # unused. Wire up once you want auto-discovery from Docker / k8s.
+  # proxmox.yaml is a newer skeleton file Homepage tries to copy into
+  # /app/config at startup; pre-seeding it avoids EACCES errors since
+  # /app/config isn't writable by our non-root user.
   docker.yaml: ""
   kubernetes.yaml: ""
+  proxmox.yaml: ""
   custom.css: ""
   custom.js: ""

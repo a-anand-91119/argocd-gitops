@@ -86,6 +86,10 @@ spec:
               subPath: kubernetes.yaml
               readOnly: true
             - name: config
+              mountPath: /app/config/proxmox.yaml
+              subPath: proxmox.yaml
+              readOnly: true
+            - name: config
               mountPath: /app/config/custom.css
               subPath: custom.css
               readOnly: true
@@ -135,6 +139,7 @@ spec:
               - { key: bookmarks.yaml,  path: bookmarks.yaml }
               - { key: docker.yaml,     path: docker.yaml }
               - { key: kubernetes.yaml, path: kubernetes.yaml }
+              - { key: proxmox.yaml,    path: proxmox.yaml }
               - { key: custom.css,      path: custom.css }
               - { key: custom.js,       path: custom.js }
         - name: logs
