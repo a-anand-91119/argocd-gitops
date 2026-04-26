@@ -6,9 +6,9 @@
 # subchart dependencies, so this single Application brings up the
 # whole stack — heavy footprint, plan for several PVCs.
 #
-# Frontend exposed at opik.k8s.notyouraverage.dev via the existing
-# cloudflare-tunnel ingress class. Add a Pangolin resource pointing at
-# opik.opik.svc.cluster.local:5173 once the chart is up.
+# No ingress is created by this Application. Expose the frontend via
+# Pangolin/Newt by adding a Pangolin resource that targets the
+# in-cluster Service: opik.opik.svc.cluster.local:5173.
 #
 # Wave 30 (application band). Namespace from the namespaces aggregator.
 apiVersion: argoproj.io/v1alpha1
@@ -33,14 +33,7 @@ spec:
         component:
           frontend:
             ingress:
-              enabled: true
-              ingressClassName: cloudflare-tunnel
-              hosts:
-                - host: opik.k8s.notyouraverage.dev
-                  paths:
-                    - path: /
-                      port: 5173
-                      pathType: Prefix
+              enabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: opik
