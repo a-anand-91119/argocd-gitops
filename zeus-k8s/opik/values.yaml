@@ -2,35 +2,66 @@
 # `opik:` since this is a chart-of-chart wrapper.
 #
 # Reuse audit:
-#   - bundled MySQL kept   — chart runs Liquibase migrations on its own DB
-#   - bundled ClickHouse kept — no in-cluster equivalent
-#   - bundled Zookeeper kept  — required by ClickHouse
-#   - bundled Redis  → DROPPED, use Valkey (valkey-primary.valkey:6379)
-#   - bundled MinIO  → DROPPED, use Athena MinIO (s3.athena.notyouraverage.dev)
+#   - bundled MySQL kept     — chart runs Liquibase migrations on its own DB
+#   - bundled ClickHouse     → DROPPED, use chc cluster (clickhouse ns)
+#   - bundled Zookeeper      → DROPPED with bundled CH
+#   - bundled Redis          → DROPPED, use Valkey (valkey-primary.valkey:6379)
+#   - bundled MinIO          → DROPPED, use Athena MinIO
 #
-# External-service credentials live in the SealedSecret
-# opik-external-creds (zeus-k8s/secrets/opik-external-creds.yml) and
-# are wired into backend + python-backend via envFrom override.
+# External-service credentials live in two SealedSecrets:
+#   - opik-external-creds     (S3 + REDIS_URL)
+#   - opik-clickhouse-creds   (ANALYTICS_DB_PASS, ANALYTICS_DB_MIGRATIONS_PASS)
+# Both wired into backend via envFrom.
 #
 # python-backend uses an envFrom override (rather than the chart's
 # native `secretRefs` field) because chart 2.0.14 renders the
 # secretRefs block at the wrong indentation when combined with the
 # default envFrom — produces invalid YAML.
+#
+# ClickHouse host pins to a single replica (chc-clickhouse-0-0-0).
+# Opik's Liquibase migrations create plain MergeTree tables that don't
+# replicate across the chc cluster, so round-robin via the headless
+# service would surface partial data. Storage HA still applies — the
+# pod's Longhorn PVC reattaches to a new node automatically on failure.
 opik:
   redis:
     enabled: false
   minio:
     enabled: false
+  clickhouse:
+    enabled: false
+  zookeeper:
+    enabled: false
+  altinity-clickhouse-operator:
+    enabled: false
+
   component:
     frontend:
       ingress:
         enabled: false
+
     backend:
+      waitForClickhouse:
+        clickhouse:
+          host: chc-clickhouse-0-0-0.chc-clickhouse-headless.clickhouse.svc.cluster.local
+          port: 8123
+          protocol: http
+      env:
+        ANALYTICS_DB_MIGRATIONS_URL: "jdbc:clickhouse://chc-clickhouse-0-0-0.chc-clickhouse-headless.clickhouse.svc.cluster.local:8123"
+        ANALYTICS_DB_HOST: "chc-clickhouse-0-0-0.chc-clickhouse-headless.clickhouse.svc.cluster.local"
+        ANALYTICS_DB_PORT: "8123"
+        ANALYTICS_DB_PROTOCOL: "HTTP"
+        ANALYTICS_DB_DATABASE_NAME: "opik"
+        ANALYTICS_DB_MIGRATIONS_USER: "opik"
+        ANALYTICS_DB_USERNAME: "opik"
       envFrom:
         - configMapRef:
             name: opik-backend
         - secretRef:
             name: opik-external-creds
+        - secretRef:
+            name: opik-clickhouse-creds
+
     python-backend:
       envFrom:
         - configMapRef:

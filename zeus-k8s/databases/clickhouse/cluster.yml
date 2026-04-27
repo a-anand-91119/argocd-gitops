@@ -34,6 +34,20 @@ spec:
   podDisruptionBudget:
     minAvailable: 1
 
+  settings:
+    extraUsersConfig:
+      users:
+        opik:
+          password_sha256_hex: 903cb32504c1751d134a881c6001875b35aad245cdbbfa5109f7a50e2b400988
+          networks:
+            ip: ::/0
+          profile: default
+          quota: default
+          access_management: 1
+          named_collection_control: 1
+          show_named_collections: 1
+          show_named_collections_secrets: 1
+
   podTemplate:
     topologySpreadConstraints:
       - maxSkew: 1
