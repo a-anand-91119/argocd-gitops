@@ -1,0 +1,44 @@
+---
+# 2 shards x 2 replicas = 4 ClickHouse pods. Each shard is fully replicated,
+# so any single replica (or any single shard's secondary) can fail without
+# data loss. Coordination is delegated to the `chk` KeeperCluster.
+apiVersion: clickhouse.com/v1alpha1
+kind: ClickHouseCluster
+metadata:
+  name: chc
+  namespace: clickhouse
+spec:
+  shards: 2
+  replicas: 2
+
+  keeperClusterRef:
+    name: chk
+
+  containerTemplate:
+    resources:
+      requests:
+        cpu: 500m
+        memory: 2Gi
+      limits:
+        cpu: 4
+        memory: 8Gi
+
+  dataVolumeClaimSpec:
+    accessModes:
+      - ReadWriteOnce
+    storageClassName: longhorn
+    resources:
+      requests:
+        storage: 50Gi
+
+  podDisruptionBudget:
+    minAvailable: 1
+
+  podTemplate:
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            clickhouse.com/clickhouse-cluster: chc

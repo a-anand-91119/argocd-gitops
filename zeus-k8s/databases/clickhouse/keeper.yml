@@ -1,0 +1,38 @@
+---
+# 3-node ClickHouse Keeper cluster (Raft quorum). Tolerates 1 node loss.
+apiVersion: clickhouse.com/v1alpha1
+kind: KeeperCluster
+metadata:
+  name: chk
+  namespace: clickhouse
+spec:
+  replicas: 3
+
+  containerTemplate:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 1
+        memory: 1Gi
+
+  dataVolumeClaimSpec:
+    accessModes:
+      - ReadWriteOnce
+    storageClassName: longhorn
+    resources:
+      requests:
+        storage: 5Gi
+
+  podDisruptionBudget:
+    maxUnavailable: 1
+
+  podTemplate:
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            clickhouse.com/keeper-cluster: chk
