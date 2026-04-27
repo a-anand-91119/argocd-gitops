@@ -17,7 +17,7 @@ spec:
   replicas: 1
 
   keeperClusterRef:
-    name: chk
+    name: chk-opik
 
   containerTemplate:
     resources:
