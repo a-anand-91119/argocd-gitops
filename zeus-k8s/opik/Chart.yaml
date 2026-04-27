@@ -1,0 +1,10 @@
+apiVersion: v2
+name: opik
+description: Sub-chart wrapping the upstream comet-ml/opik chart
+type: application
+version: 1.0.0
+appVersion: 2.0.14
+dependencies:
+  - name: opik
+    version: 2.0.14
+    repository: https://comet-ml.github.io/opik/

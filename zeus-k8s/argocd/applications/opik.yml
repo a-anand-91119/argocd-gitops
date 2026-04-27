@@ -1,10 +1,11 @@
 ---
 # Opik (comet-ml/opik): self-hosted LLM evaluation / tracing / prompt
-# optimization platform. Helm chart from upstream OCI-flavored repo
-# https://comet-ml.github.io/opik/. The chart bundles MySQL, ClickHouse
-# (via altinity-clickhouse-operator), Redis, MinIO, and Zookeeper as
-# subchart dependencies, so this single Application brings up the
-# whole stack — heavy footprint, plan for several PVCs.
+# optimization platform. Chart-of-chart pattern — local wrapper at
+# zeus-k8s/opik/ depends on the upstream chart from
+# https://comet-ml.github.io/opik/. Same pattern as cnpg-operator.
+#
+# Reuses Valkey (in-cluster) and MinIO Athena instead of bundled
+# Redis/MinIO. Bundled MySQL, ClickHouse, and Zookeeper stay.
 #
 # No ingress is created by this Application. Expose the frontend via
 # Pangolin/Newt by adding a Pangolin resource that targets the
@@ -24,45 +25,13 @@ metadata:
 spec:
   project: zeus-kubernetes
   source:
-    repoURL: https://comet-ml.github.io/opik/
-    chart: opik
-    targetRevision: 2.0.14
+    repoURL: ssh://git@gitlab.notyouraverage.dev:8443/a.anand.91119/argocd-gitops.git
+    targetRevision: HEAD
+    path: zeus-k8s/opik
     helm:
       releaseName: opik
-      valuesObject:
-        # Reuse existing in-cluster / on-Athena infrastructure where
-        # safe. Bundled MySQL stays (Opik runs schema migrations on
-        # its own DB; sharing MariaDB is risky). ClickHouse +
-        # Zookeeper stay (no equivalents exist).
-        redis:
-          enabled: false
-        minio:
-          enabled: false
-        component:
-          frontend:
-            ingress:
-              enabled: false
-          backend:
-            # Default envFrom is just the chart's ConfigMap; append
-            # our external-creds Secret so its values (REDIS_URL,
-            # AWS_*, S3_*) override the empty defaults the chart
-            # writes when redis/minio are disabled.
-            envFrom:
-              - configMapRef:
-                  name: opik-backend
-              - secretRef:
-                  name: opik-external-creds
-          python-backend:
-            # Avoid the chart's `secretRefs` field — it renders the
-            # appended `- secretRef:` block at the wrong indentation
-            # when combined with the default envFrom (chart 2.0.14
-            # bug). Override envFrom directly instead, mirroring the
-            # backend pattern.
-            envFrom:
-              - configMapRef:
-                  name: opik-python-backend
-              - secretRef:
-                  name: opik-external-creds
+      valueFiles:
+        - values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: opik
@@ -71,14 +40,8 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      # ClickHouse operator (altinity) ships large CRDs that exceed the
-      # 256 KiB last-applied annotation limit — server-side apply
-      # avoids the failure.
       - ServerSideApply=true
-      # The chart owns its own namespace lifecycle internals via
-      # subcharts; let prune treat the foreground propagation gracefully.
       - PrunePropagationPolicy=foreground
-      # Helm hooks (e.g. clickhouse setup jobs) need to run in order.
       - CreateNamespace=false
     retry:
       limit: 5

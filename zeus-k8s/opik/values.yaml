@@ -1,0 +1,39 @@
+# Values for the upstream comet-ml/opik chart, namespaced under
+# `opik:` since this is a chart-of-chart wrapper.
+#
+# Reuse audit:
+#   - bundled MySQL kept   — chart runs Liquibase migrations on its own DB
+#   - bundled ClickHouse kept — no in-cluster equivalent
+#   - bundled Zookeeper kept  — required by ClickHouse
+#   - bundled Redis  → DROPPED, use Valkey (valkey-primary.valkey:6379)
+#   - bundled MinIO  → DROPPED, use Athena MinIO (s3.athena.notyouraverage.dev)
+#
+# External-service credentials live in the SealedSecret
+# opik-external-creds (zeus-k8s/secrets/opik-external-creds.yml) and
+# are wired into backend + python-backend via envFrom override.
+#
+# python-backend uses an envFrom override (rather than the chart's
+# native `secretRefs` field) because chart 2.0.14 renders the
+# secretRefs block at the wrong indentation when combined with the
+# default envFrom — produces invalid YAML.
+opik:
+  redis:
+    enabled: false
+  minio:
+    enabled: false
+  component:
+    frontend:
+      ingress:
+        enabled: false
+    backend:
+      envFrom:
+        - configMapRef:
+            name: opik-backend
+        - secretRef:
+            name: opik-external-creds
+    python-backend:
+      envFrom:
+        - configMapRef:
+            name: opik-python-backend
+        - secretRef:
+            name: opik-external-creds
