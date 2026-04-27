@@ -47,7 +47,13 @@ opik:
           port: 8123
           protocol: http
       env:
-        ANALYTICS_DB_MIGRATIONS_URL: "jdbc:clickhouse://chc-clickhouse-0-0-0.chc-clickhouse-headless.clickhouse.svc.cluster.local:8123/opik"
+        # NOTE: no /opik path here — Opik's Liquibase migration 000017
+        # ('change-tables-to-replicated') hard-codes references to
+        # default.DATABASECHANGELOG and default.DATABASECHANGELOG1, so
+        # the migration tracker has to live in the `default` database,
+        # not in `opik`. Application data lands in the `opik` schema
+        # via ANALYTICS_DB_DATABASE_NAME below.
+        ANALYTICS_DB_MIGRATIONS_URL: "jdbc:clickhouse://chc-clickhouse-0-0-0.chc-clickhouse-headless.clickhouse.svc.cluster.local:8123"
         ANALYTICS_DB_HOST: "chc-clickhouse-0-0-0.chc-clickhouse-headless.clickhouse.svc.cluster.local"
         ANALYTICS_DB_PORT: "8123"
         ANALYTICS_DB_PROTOCOL: "HTTP"
