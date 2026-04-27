@@ -1,0 +1,13 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: bytebase
+  namespace: postgres
+spec:
+  cluster:
+    name: cnpg-postgres-17
+  name: bytebase
+  owner: bytebase
+  ensure: present
+  databaseReclaimPolicy: retain

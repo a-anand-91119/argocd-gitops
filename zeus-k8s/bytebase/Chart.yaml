@@ -1,0 +1,10 @@
+apiVersion: v2
+name: bytebase
+description: Sub-chart wrapping the upstream bytebase Helm chart
+type: application
+version: 1.0.0
+appVersion: 3.17.0
+dependencies:
+  - name: bytebase
+    version: 1.1.2
+    repository: https://bytebase.github.io/bytebase

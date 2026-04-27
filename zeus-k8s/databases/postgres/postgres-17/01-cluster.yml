@@ -35,3 +35,12 @@ spec:
 #        compression: gzip
 #        maxParallel: 2
   primaryUpdateMethod: switchover
+
+  managed:
+    roles:
+      - name: bytebase
+        ensure: present
+        login: true
+        createdb: true
+        passwordSecret:
+          name: bytebase-pg-creds

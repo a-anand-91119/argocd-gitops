@@ -1,0 +1,49 @@
+# Values for the upstream bytebase chart, namespaced under `bytebase:`
+# since this is a chart-of-chart wrapper.
+#
+# HA notes (from https://docs.bytebase.com/get-started/self-host/high-availability):
+#   - Bytebase chart 1.1.2 hard-codes the StatefulSet to replicas=1 to
+#     avoid metadata races. Multi-replica HA was introduced in Bytebase
+#     3.17 (Apr 2026) and gated behind an Enterprise license; the upstream
+#     chart hasn't exposed that knob yet.
+#   - Practical HA today: 1 Bytebase pod + 3-node HA Postgres (CNPG)
+#     metadata, longhorn-backed PVC for /var/opt/bytebase, k8s reschedules
+#     the pod on node failure.
+#
+# External access flows through Pangolin (Newt tunnel client). Pangolin
+# routes bytebase.notyouraverage.dev -> the in-cluster ClusterIP service
+# `bytebase-entrypoint.bytebase:80`.
+bytebase:
+  # Pin the image tag. The chart's StatefulSet uses
+  # global.azure.images.bytebase.tag (defaults to "latest") regardless of
+  # bytebase.version, so override it here.
+  global:
+    azure:
+      images:
+        bytebase:
+          tag: "3.17.0"
+
+  bytebase:
+    version: 3.17.0
+
+    option:
+      port: 8080
+      data: /var/opt/bytebase
+      external-url: https://bytebase.notyouraverage.dev
+      enable-json-logging: true
+      externalPg:
+        existingPgURLSecret: bytebase-pg-url
+        existingPgURLSecretKey: PG_URL
+
+    persistence:
+      enabled: true
+      storage: 10Gi
+      storageClass: longhorn
+
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        cpu: 2
+        memory: 4Gi
