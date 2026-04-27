@@ -32,6 +32,3 @@ spec:
               clickhouse-client --host chc-clickhouse-0-0-0.chc-clickhouse-headless \
                 --user default \
                 --query "CREATE DATABASE IF NOT EXISTS opik ON CLUSTER 'default'"
-              clickhouse-client --host chc-clickhouse-0-0-0.chc-clickhouse-headless \
-                --user default \
-                --query "GRANT ALL ON opik.* TO opik ON CLUSTER 'default'"
