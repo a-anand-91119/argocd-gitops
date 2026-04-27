@@ -36,6 +36,9 @@ spec:
 
   settings:
     extraUsersConfig:
+      profiles:
+        default:
+          database_replicated_allow_replicated_engine_arguments: 1
       users:
         opik:
           password_sha256_hex: 903cb32504c1751d134a881c6001875b35aad245cdbbfa5109f7a50e2b400988
