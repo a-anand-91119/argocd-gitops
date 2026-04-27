@@ -47,8 +47,10 @@ spec:
           profile: default
           quota: default
           grants:
-            - query: GRANT ALL ON opik.* WITH GRANT OPTION
-            - query: GRANT SELECT ON system.* WITH GRANT OPTION
+            # Liquibase's `ON CLUSTER` migrations create transient tracking
+            # tables in the `default` database, so opik needs cluster-wide
+            # admin privileges, not just rights on opik.*.
+            - query: GRANT ALL ON *.* WITH GRANT OPTION
 
   podTemplate:
     topologySpreadConstraints:
