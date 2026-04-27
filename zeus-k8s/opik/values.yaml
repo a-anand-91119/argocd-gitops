@@ -32,6 +32,12 @@ opik:
       ingress:
         enabled: false
     backend:
+      # Bump JDBC socket_timeout — Liquibase ON CLUSTER DDLs occasionally
+      # exceed the default 30s read timeout, leaving the schema mid-applied
+      # but DATABASECHANGELOG un-updated, which then forces the next attempt
+      # to fail on "table already exists" since changesets aren't idempotent.
+      env:
+        ANALYTICS_DB_MIGRATIONS_URL: "jdbc:clickhouse://clickhouse-opik-clickhouse:8123?socket_timeout=300000"
       envFrom:
         - configMapRef:
             name: opik-backend
