@@ -15,12 +15,6 @@ spec:
     name: chk
 
   containerTemplate:
-    # Pinned to 25.3 because the clickhouse-r2dbc driver bundled in
-    # opik-backend 2.0.14 can't decode LZ4-compressed HTTP responses
-    # from CH 26.x ("Magic is not correct - expect [-126]").
-    image:
-      repository: docker.io/clickhouse/clickhouse-server
-      tag: "25.3"
     resources:
       requests:
         cpu: 500m
@@ -39,24 +33,6 @@ spec:
 
   podDisruptionBudget:
     minAvailable: 1
-
-  settings:
-    extraUsersConfig:
-      profiles:
-        default:
-          database_replicated_allow_replicated_engine_arguments: 1
-      users:
-        opik:
-          password_sha256_hex: 903cb32504c1751d134a881c6001875b35aad245cdbbfa5109f7a50e2b400988
-          networks:
-            ip: ::/0
-          profile: default
-          quota: default
-          grants:
-            # Liquibase's `ON CLUSTER` migrations create transient tracking
-            # tables in the `default` database, so opik needs cluster-wide
-            # admin privileges, not just rights on opik.*.
-            - query: GRANT ALL ON *.* WITH GRANT OPTION
 
   podTemplate:
     topologySpreadConstraints:
