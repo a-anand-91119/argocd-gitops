@@ -47,7 +47,7 @@ opik:
           port: 8123
           protocol: http
       env:
-        ANALYTICS_DB_MIGRATIONS_URL: "jdbc:clickhouse://chc-clickhouse-0-0-0.chc-clickhouse-headless.clickhouse.svc.cluster.local:8123"
+        ANALYTICS_DB_MIGRATIONS_URL: "jdbc:clickhouse://chc-clickhouse-0-0-0.chc-clickhouse-headless.clickhouse.svc.cluster.local:8123/opik"
         ANALYTICS_DB_HOST: "chc-clickhouse-0-0-0.chc-clickhouse-headless.clickhouse.svc.cluster.local"
         ANALYTICS_DB_PORT: "8123"
         ANALYTICS_DB_PROTOCOL: "HTTP"
