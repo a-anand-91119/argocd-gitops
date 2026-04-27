@@ -46,10 +46,6 @@ spec:
             ip: ::/0
           profile: default
           quota: default
-          access_management: 1
-          named_collection_control: 1
-          show_named_collections: 1
-          show_named_collections_secrets: 1
           grants:
             - query: GRANT ALL ON opik.* WITH GRANT OPTION
             - query: GRANT SELECT ON system.* WITH GRANT OPTION
