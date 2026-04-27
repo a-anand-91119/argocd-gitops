@@ -29,7 +29,7 @@ bytebase:
     option:
       port: 8080
       data: /var/opt/bytebase
-      external-url: https://bytebase.notyouraverage.dev
+      external-url: https://bytebase.k8s.notyouraverage.dev
       enable-json-logging: true
       externalPg:
         existingPgURLSecret: bytebase-pg-url

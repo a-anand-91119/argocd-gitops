@@ -124,6 +124,10 @@ data:
             href: https://localstack-k8s.notyouraverage.dev
             description: AWS emulator
             icon: si-amazonaws
+        - Bytebase:
+            href: https://bytebase.k8s.notyouraverage.dev
+            description: Database DevOps
+            icon: bytebase.png
 
     - Athena (Proxmox):
         - Proxmox:
