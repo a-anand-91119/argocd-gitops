@@ -6,7 +6,7 @@ metadata:
   namespace: mariadb
 spec:
   mariaDbRef:
-    name: mariadb-mixpost
+    name: mariadb
   passwordSecretKeyRef:
     name: mariadb-mixpost-credentials
     key: mixpost-password

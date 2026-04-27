@@ -1,7 +1,7 @@
 ---
 # mariadb-operator: Helm sub-chart Application for mariadb-operator + mariadb-operator-crds.
 #
-# Wave -15 (operator band) lands ahead of mariadb-mixpost at wave +10 — the 25-wave
+# Wave -15 (operator band) lands ahead of mariadb at wave +10 — the 25-wave
 # gap is R6 (CRD-availability timing) structural mitigation. Child retry.limit 5 with
 # 10s->3m backoff absorbs any transient CRD-not-ready error on the first Phase 4 sync.
 #

@@ -1,16 +1,12 @@
 ---
-# mariadb-mixpost: MariaDB Galera CR + Database + User + Grant bundle for mixpost.
+# mariadb: shared MariaDB Galera cluster + per-consumer Database/User/Grant CRs.
 #
-# source.path is the PARENT directory (zeus-k8s/databases/mariadb) with
-# directory.recurse: true — locked in 03-CONTEXT.md as the user's preferred
-# future-proof shape. Today zeus-k8s/databases/mariadb/ contains only the
-# mariadb-mixpost/ subdirectory with 4 CR YAMLs, so behavior is equivalent to
-# targeting the subdir directly. Accepted trade-off: any future
-# zeus-k8s/databases/mariadb/<other>/ subdir joins THIS Application unless
-# consciously moved out or scoped to its own Application file.
+# Layout under zeus-k8s/databases/mariadb/ (recurse: true):
+#   mariadb/   -> the MariaDB Galera CR (cluster itself, name=mariadb)
+#   <svc>/     -> per-service Database + User + Grant against mariaDbRef.name=mariadb
+#                 (e.g. mixpost/). Add new services as new sibling subdirs.
 #
-# destination.namespace is `mariadb` (not `mariadb-mixpost`) — the CRs live in
-# the `mariadb` namespace consumed by the mariadb-operator.
+# destination.namespace is `mariadb` — all CRs live in the operator's namespace.
 #
 # syncOptions: ServerSideApply=true + RespectIgnoreDifferences=true so that the
 # mariadb-operator's defaulting on the MariaDB CR (agent/config/galeraLibPath/
@@ -22,7 +18,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: mariadb-mixpost
+  name: mariadb
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "10"

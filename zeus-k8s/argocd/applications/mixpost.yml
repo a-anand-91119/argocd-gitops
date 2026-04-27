@@ -5,7 +5,7 @@
 # files under zeus-k8s/mixpost/ (01-configmap.yml, 02-pvc.yml,
 # 03-deployment.yml, 04-service.yml) in filename order.
 #
-# Wave 30 (application band) — runs after the mariadb-mixpost Galera CR
+# Wave 30 (application band) — runs after the mariadb Galera CR
 # reaches Healthy at wave 10, so the schema + user exist by the time
 # mixpost pods start up.
 apiVersion: argoproj.io/v1alpha1

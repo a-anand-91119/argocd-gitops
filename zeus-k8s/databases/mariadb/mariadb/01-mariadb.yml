@@ -2,7 +2,7 @@
 apiVersion: k8s.mariadb.com/v1alpha1
 kind: MariaDB
 metadata:
-  name: mariadb-mixpost
+  name: mariadb
   namespace: mariadb
 spec:
   rootPasswordSecretKeyRef:
@@ -33,7 +33,6 @@ spec:
     enabled: true
     primary:
       podIndex: 0
-      automaticFailover: true
     sst: mariabackup
     replicaThreads: 1
     agent:
