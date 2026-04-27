@@ -13,6 +13,19 @@ spec:
   destination:
     namespace: monitoring
     server: https://kubernetes.default.svc
+  # ArgoCD 2.12.4's bundled OpenAPI schemas predate k8s 1.35's
+  # status.terminatingReplicas field on Deployment/StatefulSet,
+  # breaking the structured-merge diff under ServerSideApply.
+  # Ignore it until ArgoCD is upgraded.
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      jsonPointers:
+        - /status/terminatingReplicas
+    - group: apps
+      kind: StatefulSet
+      jsonPointers:
+        - /status/terminatingReplicas
   project: zeus-kubernetes
   source:
     helm:
