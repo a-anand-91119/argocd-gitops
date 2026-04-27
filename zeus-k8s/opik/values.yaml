@@ -18,11 +18,12 @@
 # secretRefs block at the wrong indentation when combined with the
 # default envFrom — produces invalid YAML.
 #
-# ClickHouse host pins to a single replica (chc-clickhouse-0-0-0).
-# Opik's Liquibase migrations create plain MergeTree tables that don't
-# replicate across the chc cluster, so round-robin via the headless
-# service would surface partial data. Storage HA still applies — the
-# pod's Longhorn PVC reattaches to a new node automatically on failure.
+# ClickHouse host points to chc-opik (1 shard x 1 replica), a separate
+# cluster from chc (2 shards x 2 replicas) that's reserved for Opik.
+# Opik's Liquibase migrations mix `ON CLUSTER 'default'` DDL with
+# plain CREATE TABLE, which only converges cleanly against a single-
+# node cluster — so chc-opik exists specifically to keep Opik
+# isolated. Storage HA still applies via the Longhorn-backed PVC.
 opik:
   redis:
     enabled: false
@@ -43,7 +44,7 @@ opik:
     backend:
       waitForClickhouse:
         clickhouse:
-          host: chc-clickhouse-0-0-0.chc-clickhouse-headless.clickhouse.svc.cluster.local
+          host: chc-opik-clickhouse-0-0-0.chc-opik-clickhouse-headless.clickhouse.svc.cluster.local
           port: 8123
           protocol: http
       env:
@@ -53,8 +54,8 @@ opik:
         # the migration tracker has to live in the `default` database,
         # not in `opik`. Application data lands in the `opik` schema
         # via ANALYTICS_DB_DATABASE_NAME below.
-        ANALYTICS_DB_MIGRATIONS_URL: "jdbc:clickhouse://chc-clickhouse-0-0-0.chc-clickhouse-headless.clickhouse.svc.cluster.local:8123"
-        ANALYTICS_DB_HOST: "chc-clickhouse-0-0-0.chc-clickhouse-headless.clickhouse.svc.cluster.local"
+        ANALYTICS_DB_MIGRATIONS_URL: "jdbc:clickhouse://chc-opik-clickhouse-0-0-0.chc-opik-clickhouse-headless.clickhouse.svc.cluster.local:8123"
+        ANALYTICS_DB_HOST: "chc-opik-clickhouse-0-0-0.chc-opik-clickhouse-headless.clickhouse.svc.cluster.local"
         ANALYTICS_DB_PORT: "8123"
         ANALYTICS_DB_PROTOCOL: "HTTP"
         ANALYTICS_DB_DATABASE_NAME: "opik"
