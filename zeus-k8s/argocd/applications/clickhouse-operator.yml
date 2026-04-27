@@ -6,6 +6,7 @@ metadata:
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "-15"
+    argocd.argoproj.io/compare-options: ServerSideDiff=true
     app.kubernetes.io/managed-by: argocd-gitops-repo
   finalizers:
     - resources-finalizer.argocd.argoproj.io
