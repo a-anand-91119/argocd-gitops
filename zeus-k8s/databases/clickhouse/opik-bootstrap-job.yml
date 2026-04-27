@@ -18,7 +18,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: ch-client
-          image: clickhouse/clickhouse-client:25.3
+          image: clickhouse/clickhouse-server:25.3
           command:
             - /bin/sh
             - -c
