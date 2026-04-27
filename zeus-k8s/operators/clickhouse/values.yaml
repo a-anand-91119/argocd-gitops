@@ -1,0 +1,17 @@
+# Values for the upstream clickhouse-operator-helm chart, namespaced under
+# `clickhouse-operator-helm:` since this is a chart-of-chart wrapper.
+#
+# Notes:
+#   - Cluster has no cert-manager, so install it as a subchart for the
+#     operator's webhook server (validating + mutating + conversion).
+#   - Empty watchNamespaces => watch all namespaces.
+clickhouse-operator-helm:
+  watchNamespaces: []
+
+  certManager:
+    enable: true
+    install: true
+
+  cert-manager:
+    crds:
+      enabled: true
